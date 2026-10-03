@@ -1,0 +1,246 @@
+.app-layout {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    background-color: #F7FBFF;
+}
+
+.sidebar {
+    width: 250px;
+    min-width: 250px;
+    height: 100vh;
+    min-height: 100vh;
+    position: sticky;
+    top: 0;
+    padding: 22px 16px 18px;
+    display: flex;
+    flex-direction: column;
+    background-color: #163B4D;
+    color: #FFFFFF;
+    border-right: 1px solid #244E61;
+    overflow-y: auto;
+}
+
+.sidebar-brand-new {
+    padding: 3px 6px 20px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+}
+
+.sidebar-logo {
+    width: 45px;
+    height: 45px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2196F3;
+    border-radius: 12px;
+    font-size: 21px;
+}
+
+.sidebar-brand-text {
+    min-width: 0;
+}
+
+.sidebar-brand-text h2 {
+    margin: 0;
+    color: #FFFFFF;
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.sidebar-brand-text p {
+    margin: 2px 0 0;
+    color: #9CB1BD;
+    font-size: 9px;
+    white-space: nowrap;
+}
+
+.sidebar-role {
+    width: max-content;
+    max-width: 100%;
+    margin: 18px 6px 14px;
+    padding: 6px 11px;
+    background-color: #245F80;
+    color: #BFE6FF;
+    border-radius: 18px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.sidebar-menu-new {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu-new li {
+    margin: 0 0 5px;
+}
+
+.sidebar-menu-new a {
+    width: 100%;
+    min-height: 44px;
+    padding: 9px 11px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #C6D5DD;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.45;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sidebar-menu-new a:hover {
+    background-color: #24566B;
+    color: #FFFFFF;
+}
+
+.sidebar-menu-new a.active {
+    background-color: #2196F3;
+    color: #FFFFFF;
+    font-weight: 700;
+}
+
+.menu-icon {
+    width: 22px;
+    flex: 0 0 22px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+}
+
+.menu-text {
+    min-width: 0;
+}
+
+.sidebar-bottom {
+    margin-top: auto;
+    padding: 16px 5px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.11);
+}
+
+.sidebar-user {
+    padding: 0 4px 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sidebar-avatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #2196F3;
+    color: #FFFFFF;
+    border-radius: 50%;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.sidebar-user-info {
+    min-width: 0;
+}
+
+.sidebar-user-info strong {
+    display: block;
+    color: #FFFFFF;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sidebar-user-info span {
+    display: block;
+    margin-top: 2px;
+    color: #93AAB6;
+    font-size: 10px;
+}
+
+.sidebar-logout {
+    width: 100%;
+    min-height: 42px;
+    padding: 9px 12px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background-color: #274D60;
+    color: #BCCCD4;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.sidebar-logout:hover {
+    background-color: #335B6F;
+    color: #FFFFFF;
+    border-color: #486F81;
+}
+
+.logout-icon {
+    font-size: 15px;
+}
+
+.main-area {
+    width: calc(100% - 250px);
+    min-width: 0;
+    background-color: #F7FBFF;
+}
+
+.page-content {
+    min-height: 100vh;
+    padding: 0;
+    background-color: #F7FBFF;
+}
+
+.top-navbar {
+    min-height: 65px;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #D6E4F0;
+}
+
+.navbar-title {
+    margin: 0;
+    color: #253447;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.navbar-user {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.user-icon {
+    font-size: 22px;
+}
+
+.navbar-user strong {
+    display: block;
+    font-size: 12px;
+}
+
+.navbar-user small {
+    display: block;
+    color: #64748B;
+    font-size: 10px;
+}

@@ -1,0 +1,745 @@
+/* =========================================
+   VETCARE - BILLING / CASHIER
+========================================= */
+
+
+/* PAGE */
+
+.page-content.billing-main {
+    padding: 0;
+}
+
+.billing-page {
+    min-height: 100vh;
+    background-color: #F7FBFF;
+    color: #253447;
+}
+
+.billing-page * {
+    box-sizing: border-box;
+}
+
+.bill-content {
+    padding: 20px;
+}
+
+
+/* =========================================
+   TOPBAR
+========================================= */
+
+.bill-topbar {
+    min-height: 65px;
+    padding: 12px 22px;
+    background-color: white;
+    border-bottom: 1px solid #D6E4F0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.bill-topbar h1 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.bill-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    color: #64748B;
+    font-size: 13px;
+}
+
+.bill-bell {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #E3F2FD;
+    border-radius: 50%;
+    font-size: 19px;
+}
+
+.bill-bell b {
+    position: absolute;
+    top: -3px;
+    right: -2px;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #EF4444;
+    color: white;
+    border-radius: 50%;
+    font-size: 10px;
+}
+
+
+/* =========================================
+   CARDS
+========================================= */
+
+.bill-card {
+    background-color: white;
+    border: 1px solid #D6E4F0;
+    border-radius: 10px;
+    padding: 17px;
+    margin-bottom: 16px;
+}
+
+.bill-card-title {
+    margin: 0 0 17px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #253447;
+}
+
+
+/* =========================================
+   PATIENT INFORMATION
+========================================= */
+
+.bill-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 18px;
+}
+
+.bill-info-grid div {
+    min-width: 0;
+}
+
+.bill-info-grid span {
+    display: block;
+    margin-bottom: 4px;
+    color: #64748B;
+    font-size: 12px;
+}
+
+.bill-info-grid strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.bill-diagnosis {
+    margin-top: 16px;
+    padding: 12px;
+    background-color: #F7FAFF;
+    border: 1px solid #E3EBF4;
+    border-radius: 7px;
+}
+
+.bill-diagnosis strong {
+    font-size: 12px;
+}
+
+.bill-diagnosis p {
+    margin: 5px 0 0;
+    color: #64748B;
+    font-size: 12px;
+}
+
+
+/* =========================================
+   EXPENSE TABLE
+========================================= */
+
+.bill-expense-table {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.bill-expense-table thead th {
+    padding: 10px 6px;
+    color: #64748B;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.bill-expense-table tbody td {
+    padding: 11px 6px;
+    color: #334155;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.bill-expense-table th:not(:first-child),
+.bill-expense-table td:not(:first-child) {
+    text-align: right;
+}
+
+
+/* =========================================
+   EXPENSE SUMMARY
+========================================= */
+
+.bill-totals {
+    padding-top: 7px;
+}
+
+.bill-totals>div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 0;
+}
+
+.bill-totals span {
+    color: #64748B;
+    font-size: 12px;
+}
+
+.bill-totals strong {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.bill-totals .bill-grand-total {
+    margin-top: 8px;
+    padding-top: 14px;
+    border-top: 1px solid #D6E4F0;
+}
+
+.bill-grand-total span {
+    color: #253447;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.bill-grand-total strong {
+    color: #2196F3;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+
+/* =========================================
+   PAYMENT METHOD
+========================================= */
+
+.bill-payment-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.bill-payment-option {
+    min-height: 40px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #D6E4F0;
+    border-radius: 7px;
+    background-color: white;
+    color: #64748B;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.bill-payment-option:hover {
+    background-color: #F1F8FE;
+    color: #1976D2;
+}
+
+.bill-payment-option.active {
+    background-color: #E3F2FD;
+    color: #1976D2;
+    border-color: #2196F3;
+}
+
+
+/* CASH */
+
+.bill-payment-info {
+    padding: 12px;
+    background-color: #F1F8FE;
+    border: 1px solid #D8EAFA;
+    border-radius: 7px;
+    color: #1976D2;
+    font-size: 12px;
+}
+
+.bill-payment-info p {
+    margin: 5px 0 0;
+}
+
+
+/* =========================================
+   BANK TRANSFER / QR CODE
+========================================= */
+
+.bill-transfer-info {
+    padding: 15px;
+    border: 1px solid #D8EAFA;
+    border-radius: 8px;
+    background-color: #F1F8FE;
+    text-align: center;
+}
+
+.bill-transfer-info>p {
+    margin-bottom: 13px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #1976D2;
+}
+
+.bill-qr-area {
+    width: 210px;
+    height: 210px;
+    max-width: 100%;
+    margin: 0 auto 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border: 2px dashed #90CAF9;
+    border-radius: 10px;
+    background-color: white;
+}
+
+
+/* QR image */
+
+.bill-qr-image {
+    display: block;
+    width: 185px;
+    height: 185px;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+
+/* Hide the image while src is empty */
+
+.bill-qr-image:not([src]),
+.bill-qr-image[src=""] {
+    display: none;
+}
+
+
+/* Hide placeholder text after adding image */
+
+.bill-qr-image[src]:not([src=""])+.bill-qr-placeholder {
+    display: none;
+}
+
+.bill-qr-placeholder {
+    margin: 0;
+    padding: 12px;
+    color: #94A3B8;
+    font-size: 12px;
+    text-align: center;
+}
+
+.bill-bank-details {
+    padding: 12px;
+    background-color: white;
+    border-radius: 7px;
+    text-align: left;
+}
+
+.bill-bank-details p {
+    margin: 0 0 7px;
+    font-size: 12px;
+    color: #64748B;
+}
+
+.bill-bank-details p:last-child {
+    margin-bottom: 0;
+}
+
+.bill-bank-details strong {
+    color: #334155;
+}
+
+
+/* =========================================
+   PAYMENT BUTTONS
+========================================= */
+
+.bill-action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.bill-btn-print,
+.bill-btn-save {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 13px;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.bill-btn-print {
+    background-color: white;
+    color: #1976D2;
+    border: 1px solid #90CAF9;
+}
+
+.bill-btn-print:hover {
+    background-color: #E3F2FD;
+    color: #1976D2;
+}
+
+.bill-btn-save {
+    background-color: #2196F3;
+    color: white;
+    border: 1px solid #2196F3;
+}
+
+.bill-btn-save:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.bill-demo-note {
+    margin: 12px 0 0;
+    color: #94A3B8;
+    font-size: 11px;
+    text-align: right;
+}
+
+
+/* =========================================
+   RECEIPT PREVIEW
+========================================= */
+
+.bill-receipt {
+    padding: 22px;
+    min-height: 560px;
+}
+
+.bill-receipt-header {
+    padding: 3px 0 19px;
+    text-align: center;
+    border-bottom: 1px solid #E5EDF5;
+}
+
+.bill-receipt-logo {
+    margin-bottom: 7px;
+    font-size: 27px;
+}
+
+.bill-receipt-header h2 {
+    margin: 0 0 5px;
+    color: #253447;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.bill-receipt-header p {
+    margin: 0 0 4px;
+    color: #64748B;
+    font-size: 11px;
+}
+
+.bill-receipt-header small {
+    color: #94A3B8;
+    font-size: 10px;
+}
+
+.bill-receipt-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 17px 0;
+}
+
+.bill-receipt-title h3 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.bill-unpaid-badge {
+    padding: 5px 9px;
+    border-radius: 15px;
+    background-color: #FFF3CD;
+    color: #A96500;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+
+/* RECEIPT INFO */
+
+.bill-receipt-info,
+.bill-receipt-patient {
+    padding-bottom: 14px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #E8F0F7;
+}
+
+.bill-receipt-info div,
+.bill-receipt-patient div {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.bill-receipt-info div:last-child,
+.bill-receipt-patient div:last-child {
+    margin-bottom: 0;
+}
+
+.bill-receipt-info span,
+.bill-receipt-patient span {
+    color: #64748B;
+    font-size: 11px;
+}
+
+.bill-receipt-info strong,
+.bill-receipt-patient strong {
+    font-size: 11px;
+    font-weight: 600;
+    text-align: right;
+}
+
+
+/* RECEIPT TABLE */
+
+.bill-receipt-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.bill-receipt-table th {
+    padding: 10px 5px;
+    color: #64748B;
+    font-size: 11px;
+    border-bottom: 1px solid #E5EDF5;
+}
+
+.bill-receipt-table td {
+    padding: 11px 5px;
+    color: #334155;
+    font-size: 11px;
+    border-bottom: 1px solid #F1F5F9;
+}
+
+.bill-receipt-table th:first-child,
+.bill-receipt-table td:first-child {
+    text-align: left;
+}
+
+.bill-receipt-table th:not(:first-child),
+.bill-receipt-table td:not(:first-child) {
+    text-align: right;
+}
+
+
+/* RECEIPT TOTALS */
+
+.bill-receipt-summary {
+    margin-top: 15px;
+}
+
+.bill-receipt-summary div {
+    padding: 7px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.bill-receipt-summary span {
+    color: #64748B;
+    font-size: 11px;
+}
+
+.bill-receipt-summary strong {
+    color: #334155;
+    font-size: 11px;
+}
+
+.bill-receipt-summary .bill-receipt-grand {
+    padding: 14px 0;
+    margin: 8px 0;
+    border-top: 1px solid #D6E4F0;
+    border-bottom: 1px solid #D6E4F0;
+}
+
+.bill-receipt-grand span {
+    color: #1976D2;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.bill-receipt-grand strong {
+    color: #2196F3;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+.bill-receipt-summary .bill-status-unpaid {
+    color: #A96500;
+}
+
+
+/* RECEIPT FOOTER */
+
+.bill-receipt-footer {
+    margin-top: 25px;
+    padding-top: 18px;
+    border-top: 1px solid #E5EDF5;
+    text-align: center;
+}
+
+.bill-receipt-footer p {
+    margin: 0 0 6px;
+    color: #64748B;
+    font-size: 11px;
+}
+
+.bill-receipt-footer strong {
+    display: block;
+    margin-top: 12px;
+    color: #B45309;
+    font-size: 10px;
+}
+
+
+/* =========================================
+   PRINT PREVIEW PAGE
+========================================= */
+
+.bill-print-help {
+    padding: 12px 20px;
+    background-color: #E3F2FD;
+    color: #1976D2;
+    text-align: center;
+    font-size: 13px;
+}
+
+.bill-print-help a {
+    color: #1976D2;
+    font-weight: bold;
+}
+
+.bill-print-help p {
+    margin: 5px 0 0;
+}
+
+.bill-print-content {
+    max-width: 780px;
+    margin: auto;
+}
+
+.bill-print-column {
+    width: 100%;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1199px) {
+    .bill-content {
+        padding: 15px;
+    }
+    .bill-card {
+        padding: 14px;
+    }
+}
+
+@media (max-width: 767px) {
+    .bill-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px 15px;
+    }
+    .bill-topbar h1 {
+        font-size: 17px;
+    }
+    .bill-topbar-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .bill-content {
+        padding: 12px;
+    }
+    .bill-info-grid {
+        gap: 12px;
+    }
+    .bill-action-buttons {
+        justify-content: stretch;
+    }
+    .bill-btn-print,
+    .bill-btn-save {
+        flex: 1;
+    }
+    .bill-receipt {
+        padding: 15px;
+    }
+}
+
+
+/* =========================================
+   PRINT STYLES
+========================================= */
+
+@media print {
+    @page {
+        size: A4;
+        margin: 12mm;
+    }
+    body,
+    .app-layout,
+    .main-area,
+    .page-content.billing-main,
+    .billing-page,
+    .bill-content {
+        display: block !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        background: white !important;
+    }
+    .sidebar,
+    .top-navbar,
+    .bill-topbar,
+    .bill-print-help,
+    .bill-content>.row>.col-lg-6:first-child {
+        display: none !important;
+    }
+    .bill-receipt {
+        width: 100%;
+        min-height: auto;
+        margin: 0;
+        padding: 0;
+        border: none;
+        box-shadow: none;
+    }
+    .bill-receipt-header,
+    .bill-receipt-info,
+    .bill-receipt-patient,
+    .bill-receipt-footer {
+        break-inside: avoid;
+    }
+}
