@@ -1,0 +1,737 @@
+* {
+    font-family: "Noto Sans Thai", Arial, sans-serif;
+}
+
+.page-content.appointments-main {
+    padding: 0;
+}
+
+.appointments-main .appt-page {
+    min-height: 100vh;
+    background-color: #F7FBFF;
+    color: #1F2937;
+}
+
+.appt-page {
+    min-height: 100vh;
+    background-color: #F7FBFF;
+    color: #1F2937;
+    font-family: Arial, sans-serif;
+}
+
+.appt-page * {
+    box-sizing: border-box;
+}
+
+.appt-content {
+    padding: 20px;
+}
+
+.appt-topbar {
+    min-height: 65px;
+    padding: 12px 22px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #D6E4F0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.appt-topbar h1 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: bold;
+    color: #253447;
+}
+
+.appt-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: #64748B;
+    font-size: 13px;
+    white-space: nowrap;
+}
+
+
+/* Notification */
+
+.appt-bell {
+    width: 40px;
+    height: 40px;
+    background-color: #E3F2FD;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-size: 19px;
+}
+
+.appt-bell b {
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    top: -3px;
+    right: -2px;
+    background-color: #EF4444;
+    color: #FFFFFF;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.appt-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.appt-tabs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.appt-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 35px;
+    padding: 8px 15px;
+    background-color: #FFFFFF;
+    color: #64748B;
+    border: 1px solid #D6E4F0;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.appt-tab:hover {
+    background-color: #E3F2FD;
+    color: #1976D2;
+    border-color: #90CAF9;
+}
+
+.appt-tab.active {
+    background-color: #2196F3;
+    color: #FFFFFF;
+    border-color: #2196F3;
+    font-weight: bold;
+}
+
+.appt-tab.active:hover {
+    background-color: #1976D2;
+    color: #FFFFFF;
+}
+
+.appt-create-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 35px;
+    padding: 8px 15px;
+    background-color: #2196F3;
+    color: #FFFFFF;
+    border: 1px solid #2196F3;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.appt-create-btn:hover {
+    background-color: #1976D2;
+    color: #FFFFFF;
+    border-color: #1976D2;
+}
+
+.appt-card {
+    background-color: #FFFFFF;
+    border: 1px solid #D6E4F0;
+    border-radius: 11px;
+    margin-bottom: 18px;
+    overflow: hidden;
+}
+
+.appt-card-header {
+    min-height: 60px;
+    padding: 15px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.appt-card-header h2 {
+    margin: 0;
+    color: #253447;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.appt-list-header {
+    border-bottom: 1px solid #E5EDF5;
+}
+
+.appt-filters {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.appt-search-wrap {
+    position: relative;
+}
+
+.appt-search-wrap span {
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 21px;
+    color: #94A3B8;
+    line-height: 1;
+    pointer-events: none;
+}
+
+.appt-search-wrap input {
+    width: 230px;
+    height: 35px;
+    padding: 7px 10px 7px 34px;
+    background-color: #FFFFFF;
+    color: #1F2937;
+    border: 1px solid #D6E4F0;
+    border-radius: 6px;
+    outline: none;
+    font-size: 12px;
+}
+
+.appt-search-wrap input::placeholder {
+    color: #94A3B8;
+}
+
+.appt-search-wrap input:focus {
+    border-color: #2196F3;
+}
+
+.appt-filters select {
+    min-width: 125px;
+    height: 35px;
+    padding: 6px 10px;
+    background-color: #FFFFFF;
+    color: #475569;
+    border: 1px solid #D6E4F0;
+    border-radius: 6px;
+    font-size: 12px;
+    outline: none;
+}
+
+.appt-filters select:focus {
+    border-color: #2196F3;
+}
+
+.appt-filter-btn {
+    height: 35px;
+    padding: 7px 14px;
+    background-color: #2196F3;
+    color: #FFFFFF;
+    border: 1px solid #2196F3;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.appt-filter-btn:hover {
+    background-color: #1976D2;
+    border-color: #1976D2;
+}
+
+.appt-small-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 33px;
+    padding: 7px 12px;
+    background-color: #FFFFFF;
+    color: #64748B;
+    border: 1px solid #D6E4F0;
+    border-radius: 6px;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.appt-small-btn:hover {
+    background-color: #F1F5F9;
+    color: #334155;
+}
+
+.appt-page .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.appt-page .appt-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+}
+
+.appt-page .appt-table thead th {
+    background-color: #F1F7FD;
+    color: #64748B;
+    padding: 13px 12px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap;
+    border-bottom: 1px solid #D6E4F0;
+}
+
+.appt-page .appt-table tbody td {
+    background-color: #FFFFFF;
+    color: #334155;
+    padding: 14px 12px;
+    font-size: 12px;
+    vertical-align: middle;
+    border-bottom: 1px solid #E8F0F7;
+}
+
+.appt-page .appt-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.appt-page .appt-table tbody tr:hover td {
+    background-color: #F7FBFF;
+}
+
+.appt-page .appt-id {
+    color: #64748B;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.appt-date-cell {
+    white-space: nowrap;
+}
+
+.appt-date-cell span {
+    display: block;
+    color: #334155;
+    font-size: 12px;
+}
+
+.appt-date-cell strong {
+    display: block;
+    margin-top: 4px;
+    color: #2196F3;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.appt-status {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.appt-status.status-confirmed {
+    background-color: #E3F2FD;
+    color: #1976D2;
+}
+
+.appt-status.status-waiting {
+    background-color: #FFF3CD;
+    color: #A66B00;
+}
+
+.appt-status.status-serving {
+    background-color: #DCEEFF;
+    color: #1565C0;
+}
+
+.appt-status.status-done {
+    background-color: #DCFCE7;
+    color: #15803D;
+}
+
+.appt-status.status-cancelled {
+    background-color: #FFE4E6;
+    color: #BE123C;
+}
+
+.appt-row-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.appt-edit-btn {
+    display: inline-block;
+    padding: 6px 9px;
+    background-color: #E3F2FD;
+    color: #1976D2;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.appt-edit-btn:hover {
+    background-color: #CDE8FC;
+    color: #1565C0;
+}
+
+.appt-cancel-btn {
+    display: inline-block;
+    padding: 6px 9px;
+    background-color: #FFE4E6;
+    color: #BE123C;
+    border-radius: 5px;
+    font-size: 11px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.appt-cancel-btn:hover {
+    background-color: #FECDD3;
+    color: #9F1239;
+}
+
+.appt-page .appt-no-data {
+    padding: 35px 15px;
+    color: #94A3B8;
+    font-size: 13px;
+    text-align: center;
+}
+
+.appt-table-footer {
+    padding: 12px 18px;
+    border-top: 1px solid #E8F0F7;
+    background-color: #FFFFFF;
+    color: #94A3B8;
+    font-size: 11px;
+}
+
+.appt-form-panel {
+    padding: 0 18px 18px;
+}
+
+.appt-form-panel .appt-card-header {
+    padding-left: 0;
+    padding-right: 0;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #E8F0F7;
+}
+
+.appt-form-panel .form-label {
+    display: block;
+    margin-bottom: 5px;
+    color: #64748B;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.appt-form-panel .form-control,
+.appt-form-panel .form-select {
+    min-height: 37px;
+    padding: 7px 11px;
+    background-color: #FFFFFF;
+    color: #334155;
+    border: 1px solid #D6E4F0;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+.appt-form-panel .form-control:focus,
+.appt-form-panel .form-select:focus {
+    border-color: #2196F3;
+    box-shadow: none;
+    outline: none;
+}
+
+.appt-form-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #E8F0F7;
+}
+
+.appt-form-actions .btn {
+    padding: 7px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.appt-confirm {
+    padding: 18px;
+}
+
+.appt-confirm h2 {
+    margin-bottom: 10px;
+    color: #253447;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.appt-confirm p {
+    margin-bottom: 15px;
+    color: #64748B;
+    font-size: 13px;
+}
+
+.appt-confirm .btn {
+    margin-right: 6px;
+    padding: 7px 13px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.appt-calendar-panel {
+    padding: 18px;
+}
+
+.appt-calendar-header {
+    padding: 0 0 15px;
+    border-bottom: 1px solid #E8F0F7;
+    margin-bottom: 8px;
+}
+
+.appt-calendar-header h2 {
+    color: #253447;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.appt-calendar-nav {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.appt-calendar-nav a {
+    min-width: 32px;
+    height: 30px;
+    padding: 5px 10px;
+    background-color: #FFFFFF;
+    color: #64748B;
+    border: 1px solid #D6E4F0;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.appt-calendar-nav a:hover {
+    background-color: #E3F2FD;
+    color: #1976D2;
+    border-color: #90CAF9;
+}
+
+.appt-calendar-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.appt-weekday {
+    padding: 14px 5px;
+    color: #64748B;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.appt-calendar-cell {
+    min-height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #F1F5F9;
+}
+
+.appt-day-number {
+    width: 55px;
+    height: 55px;
+    color: #334155;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.appt-day-number:hover {
+    background-color: #E3F2FD;
+    color: #1976D2;
+}
+
+.appt-day-number.selected {
+    background-color: #2196F3;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.appt-day-number.selected:hover {
+    background-color: #1976D2;
+    color: #FFFFFF;
+}
+
+.appt-dot {
+    width: 5px;
+    height: 5px;
+    display: block;
+    margin-top: 5px;
+    background-color: #2A9D8F;
+    border-radius: 50%;
+}
+
+.appt-day-number.selected .appt-dot {
+    background-color: #FFFFFF;
+}
+
+.appt-calendar-help {
+    margin: 15px 0 0;
+    padding-top: 13px;
+    color: #94A3B8;
+    border-top: 1px solid #E8F0F7;
+    font-size: 11px;
+}
+
+@media (max-width: 1200px) {
+    .appt-list-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .appt-filters {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+    .appt-search-wrap {
+        flex: 1;
+    }
+    .appt-search-wrap input {
+        width: 100%;
+    }
+    .appt-page .appt-table {
+        min-width: 850px;
+    }
+}
+
+@media (max-width: 767px) {
+    .appt-content {
+        padding: 12px;
+    }
+    /* Header */
+    .appt-topbar {
+        min-height: 60px;
+        padding: 12px 15px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .appt-topbar h1 {
+        font-size: 17px;
+    }
+    .appt-topbar-right {
+        width: 100%;
+        justify-content: space-between;
+        font-size: 12px;
+    }
+    /* Toolbar */
+    .appt-toolbar {
+        flex-wrap: wrap;
+    }
+    .appt-tabs {
+        gap: 5px;
+    }
+    .appt-tab,
+    .appt-create-btn {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+    /* Card */
+    .appt-card-header {
+        padding: 12px;
+    }
+    .appt-card-header h2 {
+        font-size: 14px;
+    }
+    /* Filters */
+    .appt-filters {
+        gap: 7px;
+    }
+    .appt-search-wrap {
+        width: 100%;
+        flex: auto;
+    }
+    .appt-search-wrap input {
+        width: 100%;
+    }
+    .appt-filters select {
+        flex: 1;
+    }
+    /* Table */
+    .appt-page .appt-table thead th,
+    .appt-page .appt-table tbody td {
+        padding: 11px 9px;
+        font-size: 11px;
+    }
+    /* Form */
+    .appt-form-panel {
+        padding: 0 12px 15px;
+    }
+    /* Calendar */
+    .appt-calendar-panel {
+        padding: 10px;
+    }
+    .appt-calendar-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .appt-calendar-grid {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+    .appt-weekday {
+        padding: 10px 3px;
+        font-size: 11px;
+    }
+    .appt-calendar-cell {
+        min-height: 51px;
+    }
+    .appt-day-number {
+        width: 35px;
+        height: 35px;
+        font-size: 12px;
+    }
+    .appt-dot {
+        width: 4px;
+        height: 4px;
+        margin-top: 3px;
+    }
+}

@@ -1,0 +1,70 @@
+/* =========================================
+   VETCARE GLOBAL
+========================================= */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background-color: #F7FBFF;
+}
+
+body {
+    font-family: "Noto Sans Thai", Arial, sans-serif;
+    color: #253447;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+    font-family: "Noto Sans Thai", Arial, sans-serif;
+}
+
+
+/* =========================================
+   GLOBAL PAGE TEXT
+========================================= */
+
+.page-title {
+    margin: 0 0 5px;
+    color: #253447;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+.page-description {
+    margin: 0 0 20px;
+    color: #64748B;
+    font-size: 13px;
+}
+
+
+/* =========================================
+   GLOBAL CARD
+========================================= */
+
+.vet-card {
+    padding: 18px;
+    background-color: #FFFFFF;
+    border: 1px solid #D6E4F0;
+    border-radius: 10px;
+}
+
+.section-title {
+    margin: 0 0 15px;
+    color: #253447;
+    font-size: 17px;
+    font-weight: 700;
+}

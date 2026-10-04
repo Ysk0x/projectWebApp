@@ -1,0 +1,274 @@
+.owners-page {
+    background-color: #F4F8FC;
+    min-height: 100px;
+    padding: 10px;
+}
+
+.owners-header {
+    background-color: white;
+    border-bottom: 1px solid #D6E4F0;
+    padding: 15px 20px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.owners-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #1F2937;
+}
+
+.owners-header-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.owners-date {
+    color: #64748B;
+    font-size: 14px;
+}
+
+.owners-bell {
+    width: 42px;
+    height: 42px;
+    background-color: #E3F2FD;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.bell-number {
+    width: 18px;
+    height: 18px;
+    background-color: #EF4444;
+    color: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 10px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.owners-toolbar {
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.owner-search {
+    width: 320px;
+    position: relative;
+}
+
+.owner-search .form-control {
+    height: 42px;
+    padding-left: 38px;
+    border-color: #D6E4F0;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 9px;
+    font-size: 15px;
+}
+
+.owner-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.owner-list-title {
+    margin-bottom: 12px;
+    color: #64748B;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.owner-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.owner-item {
+    min-height: 95px;
+    background-color: white;
+    border: 1px solid #D6E4F0;
+    border-radius: 10px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.owner-item:hover {
+    border-color: #2196F3;
+}
+
+.owner-item.active {
+    background-color: #E3F2FD;
+    border-color: #2196F3;
+}
+
+.owner-avatar {
+    width: 42px;
+    height: 42px;
+    background-color: #2196F3;
+    color: white;
+    border-radius: 50%;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.owner-item-info {
+    width: 100%;
+}
+
+.owner-item-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.owner-item-top h3 {
+    margin: 0;
+    color: #1F2937;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.owner-phone {
+    margin: 2px 0;
+    color: #64748B;
+    font-size: 13px;
+}
+
+.owner-address {
+    margin: 0;
+    color: #64748B;
+    font-size: 12px;
+}
+
+.owner-pet-count {
+    background-color: #E3F2FD;
+    color: #1976D2;
+    padding: 3px 9px;
+    border-radius: 15px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.owner-detail-card {
+    background-color: white;
+    border: 1px solid #D6E4F0;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 18px;
+}
+
+.detail-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.detail-card-header h2 {
+    margin: 0;
+    font-size: 17px;
+    font-weight: bold;
+}
+
+.detail-label {
+    margin: 0 0 2px;
+    color: #64748B;
+    font-size: 12px;
+}
+
+.detail-value {
+    margin: 0;
+    color: #1F2937;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.pet-section-title {
+    margin-bottom: 10px;
+    color: #64748B;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.pet-card {
+    background-color: white;
+    border: 1px solid #D6E4F0;
+    border-radius: 10px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.pet-main {
+    display: flex;
+    align-items: center;
+}
+
+.pet-icon {
+    font-size: 30px;
+    margin-right: 12px;
+}
+
+.pet-info h3 {
+    margin: 0 0 3px;
+    color: #1F2937;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.pet-info p {
+    margin: 0 0 5px;
+    color: #64748B;
+    font-size: 13px;
+}
+
+.pet-tags {
+    display: flex;
+    gap: 5px;
+}
+
+.pet-tags span {
+    background-color: #F1F5F9;
+    color: #64748B;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 10px;
+}
+
+.pet-actions {
+    display: flex;
+    gap: 7px;
+}
+
+.add-pet-button {
+    font-size: 13px;
+}

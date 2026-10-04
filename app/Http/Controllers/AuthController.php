@@ -9,7 +9,7 @@ class AuthController extends Controller
 {
     public function showLogin()
     {
-        return view('pages.auth.login'); 
+        return view('vetcare/login'); 
     }
 
     // ตรวจสอบข้อมูล Login
@@ -24,10 +24,10 @@ class AuthController extends Controller
             $request->session()->regenerate();
 
             // เช็ค Role เพื่อเตะไปหน้า Dashboard ที่ถูกต้อง
-            if (Auth::user()->role === 'admin') {
-                return redirect()->intended('/admin-dashboard');
+            if (Auth::user()->role === 'manager') {
+                return redirect()->intended(route('vetcare.manager.dashboard'));
             }
-            return redirect()->intended('/staff-dashboard');
+            return redirect()->intended(route('vetcare.staff.dashboard'));
         }
 
         return back()->withErrors(['email' => 'อีเมลหรือรหัสผ่านไม่ถูกต้อง']);
@@ -39,7 +39,6 @@ class AuthController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect('/login');
+        return redirect()->route('login');
     }
 }
-

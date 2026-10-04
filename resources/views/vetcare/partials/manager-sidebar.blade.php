@@ -171,18 +171,20 @@
              LOGOUT
         ================================ --}}
 
-        <a
-            href="{{ route('login') }}"
-            class="sidebar-logout"
-        >
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
 
-            <span>
-                ↪
-            </span>
+            <button type="submit" class="sidebar-logout">
 
-            ออกจากระบบ
+                <span>
+                    ↪
+                </span>
 
-        </a>
+                ออกจากระบบ
+
+            </button>
+
+        </form>
 
 
     </div>

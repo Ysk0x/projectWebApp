@@ -1,0 +1,606 @@
+/* =========================================
+   STAFF INVENTORY
+========================================= */
+
+.page-content.inventory-main {
+    padding: 0;
+}
+
+.inventory-page {
+    min-height: 100vh;
+    background-color: #F7FBFF;
+    color: #253447;
+}
+
+.inventory-page * {
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   HEADER
+========================================= */
+
+.inventory-topbar {
+    min-height: 65px;
+    padding: 12px 22px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #D6E4F0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.inventory-topbar h1 {
+    margin: 0;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.inventory-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    color: #64748B;
+    font-size: 13px;
+}
+
+
+/* Bell */
+
+.inventory-bell {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #E3F2FD;
+    border-radius: 50%;
+    font-size: 19px;
+}
+
+.inventory-bell b {
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    top: -3px;
+    right: -2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #EF4444;
+    color: white;
+    border-radius: 50%;
+    font-size: 10px;
+}
+
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.inventory-content {
+    padding: 20px;
+}
+
+
+/* =========================================
+   INFORMATION BOX
+========================================= */
+
+.inventory-info {
+    min-height: 54px;
+    padding: 12px 15px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    background-color: #E7F3FD;
+    border: 1px solid #B9DCF7;
+    border-radius: 9px;
+    color: #1976D2;
+}
+
+.inventory-info-icon {
+    width: 25px;
+    height: 25px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #7FB8E3;
+    color: white;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.inventory-info p {
+    margin: 0;
+    font-size: 12px;
+}
+
+.inventory-info strong {
+    font-weight: bold;
+}
+
+
+/* =========================================
+   SUMMARY
+========================================= */
+
+.inventory-summary-card {
+    min-height: 88px;
+    padding: 15px;
+    background-color: white;
+    border: 1px solid #D6E4F0;
+    border-radius: 10px;
+}
+
+.inventory-summary-card span {
+    display: block;
+    margin-bottom: 4px;
+    color: #64748B;
+    font-size: 12px;
+}
+
+.inventory-summary-card strong {
+    display: block;
+    color: #253447;
+    font-size: 25px;
+    line-height: 1;
+    font-weight: bold;
+}
+
+.inventory-summary-card .summary-normal {
+    color: #15803D;
+}
+
+.inventory-summary-card .summary-low {
+    color: #C56A00;
+}
+
+.inventory-summary-card .summary-out {
+    color: #DC2626;
+}
+
+
+/* =========================================
+   CARD
+========================================= */
+
+.inventory-card {
+    background-color: white;
+    border: 1px solid #D6E4F0;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.inventory-card-header {
+    min-height: 78px;
+    padding: 15px 17px;
+    border-bottom: 1px solid #E6EEF5;
+}
+
+.inventory-card-header h2 {
+    margin: 0 0 13px;
+    color: #253447;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+
+/* =========================================
+   SEARCH / FILTER
+========================================= */
+
+.inventory-filter {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.inventory-search {
+    position: relative;
+    flex: 1;
+    max-width: 320px;
+}
+
+.inventory-search span {
+    position: absolute;
+    left: 11px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    pointer-events: none;
+}
+
+.inventory-search input {
+    width: 100%;
+    height: 36px;
+    padding: 7px 10px 7px 35px;
+    background-color: white;
+    border: 1px solid #D6E4F0;
+    border-radius: 6px;
+    color: #334155;
+    font-size: 12px;
+    outline: none;
+}
+
+.inventory-search input:focus {
+    border-color: #2196F3;
+}
+
+.inventory-search input::placeholder {
+    color: #94A3B8;
+}
+
+
+/* Select */
+
+.inventory-select {
+    min-width: 120px;
+    height: 36px;
+    padding: 6px 9px;
+    background-color: white;
+    border: 1px solid #D6E4F0;
+    border-radius: 6px;
+    color: #334155;
+    font-size: 12px;
+    outline: none;
+}
+
+.inventory-select:focus {
+    border-color: #2196F3;
+}
+
+
+/* Filter Button */
+
+.inventory-filter-btn {
+    height: 36px;
+    padding: 7px 13px;
+    background-color: #2196F3;
+    color: white;
+    border: 1px solid #2196F3;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.inventory-filter-btn:hover {
+    background-color: #1976D2;
+}
+
+
+/* Clear */
+
+.inventory-clear-btn {
+    min-height: 36px;
+    padding: 8px 10px;
+    background-color: white;
+    border: 1px solid #D6E4F0;
+    border-radius: 6px;
+    color: #64748B;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.inventory-clear-btn:hover {
+    background-color: #F1F5F9;
+    color: #334155;
+}
+
+
+/* =========================================
+   TABLE
+========================================= */
+
+.inventory-table {
+    width: 100%;
+    margin: 0;
+}
+
+.inventory-table thead th {
+    padding: 11px 10px;
+    background-color: #F4F8FC;
+    color: #64748B;
+    border-bottom: 1px solid #D6E4F0;
+    font-size: 11px;
+    font-weight: bold;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+.inventory-table tbody td {
+    padding: 12px 10px;
+    color: #334155;
+    border-bottom: 1px solid #EDF2F7;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.inventory-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.inventory-table tbody tr:hover td {
+    background-color: #F8FBFF;
+}
+
+
+/* Selected */
+
+.inventory-selected-row td {
+    background-color: #EDF7FF !important;
+}
+
+
+/* Medicine code */
+
+.inventory-code {
+    color: #64748B !important;
+    font-size: 11px !important;
+    font-weight: 600;
+}
+
+.inventory-medicine-name {
+    color: #253447;
+    font-size: 12px;
+}
+
+
+/* =========================================
+   STOCK NUMBER
+========================================= */
+
+.stock-number {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.stock-normal {
+    color: #15803D;
+}
+
+.stock-low {
+    color: #C56A00;
+}
+
+.stock-out {
+    color: #DC2626;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.inventory-status {
+    display: inline-block;
+    padding: 5px 8px;
+    border-radius: 15px;
+    font-size: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.status-normal {
+    background-color: #DCFCE7;
+    color: #15803D;
+}
+
+.status-low {
+    background-color: #FFF3CD;
+    color: #B85F00;
+}
+
+.status-out {
+    background-color: #FFE4E6;
+    color: #BE123C;
+}
+
+
+/* =========================================
+   DETAIL BUTTON
+========================================= */
+
+.inventory-detail-btn {
+    display: inline-block;
+    padding: 6px 9px;
+    background-color: #E3F2FD;
+    color: #1976D2;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+}
+
+.inventory-detail-btn:hover {
+    background-color: #CDE8FC;
+    color: #1565C0;
+}
+
+
+/* =========================================
+   EMPTY TABLE
+========================================= */
+
+.inventory-empty-table {
+    padding: 35px !important;
+    color: #94A3B8 !important;
+    text-align: center;
+    font-size: 12px !important;
+}
+
+.inventory-table-footer {
+    padding: 10px 16px;
+    border-top: 1px solid #EDF2F7;
+    color: #94A3B8;
+    font-size: 10px;
+}
+
+
+/* =========================================
+   MEDICINE DETAIL
+========================================= */
+
+.medicine-detail-card {
+    min-height: 440px;
+    padding: 19px;
+}
+
+.medicine-detail-icon {
+    width: 58px;
+    height: 58px;
+    margin: 3px auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFF8DF;
+    border-radius: 50%;
+    font-size: 31px;
+}
+
+.medicine-detail-name {
+    margin: 0;
+    color: #253447;
+    font-size: 17px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.detail-status {
+    display: table;
+    margin: 8px auto 18px;
+}
+
+
+/* Detail rows */
+
+.medicine-detail-list {
+    border-top: 1px solid #EDF2F7;
+}
+
+.medicine-detail-list>div {
+    min-height: 43px;
+    padding: 10px 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+    border-bottom: 1px solid #EDF2F7;
+}
+
+.medicine-detail-list span {
+    color: #64748B;
+    font-size: 11px;
+}
+
+.medicine-detail-list strong {
+    max-width: 60%;
+    color: #334155;
+    font-size: 11px;
+    font-weight: 600;
+    text-align: right;
+}
+
+.medicine-storage strong {
+    line-height: 1.5;
+}
+
+
+/* Read only */
+
+.medicine-view-note {
+    margin-top: 15px;
+    padding: 9px;
+    background-color: #F1F5F9;
+    color: #64748B;
+    border-radius: 6px;
+    font-size: 10px;
+    text-align: center;
+}
+
+
+/* =========================================
+   EMPTY DETAIL
+========================================= */
+
+.medicine-empty-detail {
+    min-height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.medicine-empty-icon {
+    margin-bottom: 13px;
+    font-size: 40px;
+}
+
+.medicine-empty-detail h3 {
+    margin: 0 0 6px;
+    color: #64748B;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.medicine-empty-detail p {
+    margin: 0;
+    color: #94A3B8;
+    font-size: 11px;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1199px) {
+    .medicine-detail-card {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 767px) {
+    .inventory-topbar {
+        padding: 12px 15px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .inventory-topbar h1 {
+        font-size: 17px;
+    }
+    .inventory-topbar-right {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .inventory-content {
+        padding: 12px;
+    }
+    .inventory-info {
+        align-items: flex-start;
+    }
+    .inventory-filter {
+        align-items: stretch;
+        flex-direction: column;
+    }
+    .inventory-search {
+        max-width: none;
+    }
+    .inventory-select,
+    .inventory-filter-btn,
+    .inventory-clear-btn {
+        width: 100%;
+    }
+    .inventory-table {
+        min-width: 620px;
+    }
+}

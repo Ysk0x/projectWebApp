@@ -1,0 +1,398 @@
+.page-content.treatments-main {
+    padding: 0;
+}
+
+.treat-page {
+    min-height: 100vh;
+    background-color: #F7FBFF;
+    color: #1F2937;
+}
+
+.treat-page * {
+    box-sizing: border-box;
+}
+
+.treat-content {
+    padding: 20px;
+}
+
+.treat-topbar {
+    min-height: 65px;
+    padding: 12px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #D6E4F0;
+}
+
+.treat-topbar h1 {
+    margin: 0;
+    color: #253447;
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.treat-topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.treat-date {
+    font-size: 13px;
+    color: #64748B;
+}
+
+.treat-bell {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #E3F2FD;
+    font-size: 19px;
+}
+
+.treat-bell-count {
+    position: absolute;
+    top: -3px;
+    right: -2px;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background-color: #EF4444;
+    color: white;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+.treat-card {
+    padding: 18px;
+    margin-bottom: 16px;
+    background-color: #FFFFFF;
+    border: 1px solid #D6E4F0;
+    border-radius: 11px;
+}
+
+.treat-card-title {
+    margin: 0 0 18px;
+    font-size: 17px;
+    font-weight: bold;
+    color: #253447;
+}
+
+.treat-pet-heading {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 18px;
+}
+
+.treat-pet-avatar {
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background-color: #F1F7FD;
+    font-size: 35px;
+}
+
+.treat-pet-heading-info h3 {
+    margin: 0 0 5px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.treat-pet-heading-info p {
+    margin: 0;
+    color: #64748B;
+    font-size: 13px;
+}
+
+.treat-detail-row {
+    min-height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #EDF2F7;
+}
+
+.treat-detail-row span {
+    color: #64748B;
+    font-size: 13px;
+}
+
+.treat-detail-row strong {
+    color: #253447;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: right;
+}
+
+.treat-history-link {
+    width: 100%;
+    min-height: 37px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 16px;
+    padding: 8px 12px;
+    background-color: #E3F2FD;
+    color: #1976D2;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.treat-history-link:hover {
+    color: #1565C0;
+    background-color: #CDE8FC;
+}
+
+#treatment-history {
+    scroll-margin-top: 20px;
+}
+
+.history-card .treat-card-title {
+    color: #64748B;
+}
+
+.treat-history-item {
+    display: grid;
+    grid-template-columns: 90px 1fr auto;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 0;
+    border-bottom: 1px solid #EDF2F7;
+}
+
+.treat-history-item:last-of-type {
+    border-bottom: none;
+}
+
+.history-date {
+    color: #64748B;
+    font-size: 12px;
+}
+
+.history-service {
+    color: #253447;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.history-status {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    background-color: #DCFCE7;
+    color: #15803D;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.history-note {
+    margin: 12px 0 0;
+    color: #94A3B8;
+    font-size: 11px;
+}
+
+.treatment-card .form-label,
+.medicine-card .form-label {
+    margin-bottom: 6px;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.treatment-card .form-control,
+.treatment-card .form-select,
+.medicine-card .form-control,
+.medicine-card .form-select {
+    min-height: 39px;
+    padding: 8px 11px;
+    background-color: #FFFFFF;
+    color: #334155;
+    border: 1px solid #D6E4F0;
+    border-radius: 7px;
+    font-size: 13px;
+}
+
+.treatment-card .form-control:focus,
+.treatment-card .form-select:focus,
+.medicine-card .form-control:focus,
+.medicine-card .form-select:focus {
+    border-color: #2196F3;
+    box-shadow: none;
+}
+
+.treatment-card .treat-textarea {
+    min-height: 73px;
+    resize: vertical;
+}
+
+.treatment-card textarea::placeholder,
+.medicine-card input::placeholder {
+    color: #94A3B8;
+}
+
+.medicine-card {
+    min-height: 260px;
+}
+
+.medicine-form-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(85px, 0.45fr) minmax(0, 1.2fr);
+    gap: 12px;
+    align-items: end;
+}
+
+.medicine-field {
+    min-width: 0;
+}
+
+.medicine-quantity input {
+    width: 100%;
+}
+
+.additional-medicine {
+    margin-top: 14px;
+}
+
+.additional-medicine summary {
+    list-style: none;
+}
+
+.additional-medicine summary::-webkit-details-marker {
+    display: none;
+}
+
+.treat-add-medicine {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 35px;
+    padding: 8px 14px;
+    background-color: #2196F3;
+    color: #FFFFFF;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.treat-add-medicine:hover {
+    background-color: #1976D2;
+}
+
+.hide-label {
+    display: none;
+}
+
+.additional-medicine[open] .add-label {
+    display: none;
+}
+
+.additional-medicine[open] .hide-label {
+    display: inline;
+}
+
+.additional-medicine-content {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid #E8F0F7;
+}
+
+.additional-medicine-content h3 {
+    margin: 0 0 12px;
+    color: #64748B;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.medicine-empty {
+    min-height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 18px;
+    margin-top: 10px;
+    color: #94A3B8;
+    font-size: 12px;
+    text-align: center;
+}
+
+.treat-footer-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 9px;
+    margin-top: 8px;
+}
+
+.treat-btn-cancel,
+.treat-btn-save,
+.treat-btn-confirm {
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 16px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.treat-btn-cancel {
+    color: #64748B;
+    background-color: #FFFFFF;
+    border: 1px solid #D6E4F0;
+}
+
+.treat-btn-cancel:hover {
+    color: #334155;
+    background-color: #F1F5F9;
+}
+
+.treat-btn-save {
+    color: #1976D2;
+    background-color: #FFFFFF;
+    border: 1px solid #2196F3;
+}
+
+.treat-btn-confirm {
+    color: #FFFFFF;
+    background-color: #2196F3;
+    border: 1px solid #2196F3;
+}
+
+.treat-btn-save:hover {
+    background-color: #CDE8FC;
+}
+
+.treat-btn-confirm:hover {
+    background-color: #1565C0;
+}
+
+.treat-demo-note {
+    margin: 11px 0 0;
+    color: #94A3B8;
+    font-size: 11px;
+    text-align: right;
+}
