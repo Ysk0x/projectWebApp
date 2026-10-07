@@ -2,13 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ManagerController;
 
 Route::view('/', 'welcome')->name('home');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('my.login.submit');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
     Route::view('/dashboard', 'vetcare.staff.dashboard')
@@ -29,8 +30,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('/inventory', 'vetcare.staff.inventory')
         ->name('vetcare.staff.inventory');
 
-    Route::view('/manager/dashboard', 'vetcare.manager.dashboard')
-        ->name('vetcare.manager.dashboard');
+    Route::get('/manager/dashboard', [ManagerController::class, 'dashboard'])->name('vetcare.manager.dashboard');
 
     Route::view('/users', 'vetcare.manager.users')
         ->name('vetcare.manager.users');

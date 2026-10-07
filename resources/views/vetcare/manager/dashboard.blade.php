@@ -360,17 +360,8 @@
 
                 <div class="manager-summary-info">
 
-                    <span>
-                        รายได้วันนี้
-                    </span>
-
-                    <strong>
-                        ฿18,450
-                    </strong>
-
-                    <small class="positive-text">
-                        ↑ 12% จากเมื่อวาน
-                    </small>
+                    <span>รายได้วันนี้</span>
+                    <strong>฿{{ number_format($todayRevenue) }}</strong>
 
                 </div>
 
@@ -388,17 +379,8 @@
 
                 <div class="manager-summary-info">
 
-                    <span>
-                        รายได้เดือนนี้
-                    </span>
-
-                    <strong>
-                        ฿284,200
-                    </strong>
-
-                    <small>
-                        เป้าหมาย ฿300,000
-                    </small>
+                    <span>รายได้เดือนนี้</span>
+                    <strong>฿{{ number_format($monthlyRevenueTotal) }}</strong>
 
                 </div>
 
@@ -415,19 +397,9 @@
                 </div>
 
                 <div class="manager-summary-info">
-
-                    <span>
-                        สัตว์รับบริการ
-                    </span>
-
-                    <strong>
-                        24
-                    </strong>
-
-                    <small>
-                        วันนี้
-                    </small>
-
+                    <span>สัตว์รับบริการ</span>
+                    <strong>{{ $petsServedToday }}</strong>
+                    <small>วันนี้</small>
                 </div>
 
             </div>
@@ -443,19 +415,9 @@
                 </div>
 
                 <div class="manager-summary-info">
-
-                    <span>
-                        รอชำระเงิน
-                    </span>
-
-                    <strong>
-                        7
-                    </strong>
-
-                    <small>
-                        รายการ
-                    </small>
-
+                    <span>รอชำระเงิน</span>
+                    <strong>{{ $pendingPaymentsCount }}</strong>
+                    <small>รายการ</small>
                 </div>
 
             </div>
@@ -471,19 +433,9 @@
                 </div>
 
                 <div class="manager-summary-info">
-
-                    <span>
-                        แจ้งเตือนสต็อก
-                    </span>
-
-                    <strong>
-                        5
-                    </strong>
-
-                    <small>
-                        รายการ
-                    </small>
-
+                    <span>แจ้งเตือนสต็อก</span>
+                    <strong>{{ $stockAlertsCount }}</strong>
+                    <small>รายการ</small>
                 </div>
 
             </div>

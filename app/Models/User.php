@@ -15,6 +15,8 @@ use Laravel\Fortify\Contracts\PasskeyUser;
 use Laravel\Fortify\PasskeyAuthenticatable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 
+
+
 /**
  * @property int $id
  * @property string $name
@@ -34,6 +36,10 @@ class User extends Authenticatable implements PasskeyUser
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable, PasskeyAuthenticatable, TwoFactorAuthenticatable;
+
+    protected $primaryKey = 'user_id';
+    public $incrementing = false; 
+    protected $keyType = 'string';
 
     /**
      * Get the attributes that should be cast.
