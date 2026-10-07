@@ -1,637 +1,207 @@
-
 @extends('vetcare.layouts.staff')
 
 @section('title', 'Staff Appointments')
 @section('page-name', 'Appointments')
 
 @push('styles')
-<link rel="stylesheet" href="{{ asset('css/vetcare/appointments.css') }}?v=3">
+    <link rel="stylesheet" href="{{ asset('css/vetcare/appointments.css') }}?v=3">
 @endpush
 
 @php
-    // ===================================
-    // 1. MOCK DATA
-    // ===================================
-
     $today = now('Asia/Bangkok');
 
-    $appointments = [
-        [
-            'id' => 'APT-001',
-            'date' => $today->format('Y-m-d'),
-            'time' => '09:00',
-            'owner' => 'วิชัย สมใจ',
-            'pet' => 'มะม่วง',
-            'service' => 'ตรวจทั่วไป',
-            'staff' => 'วิภา รักดี',
-            'status' => 'done',
-        ],
-        [
-            'id' => 'APT-002',
-            'date' => $today->format('Y-m-d'),
-            'time' => '09:30',
-            'owner' => 'พิมพ์ใจ ดีงาม',
-            'pet' => 'มุก',
-            'service' => 'ฉีดวัคซีน',
-            'staff' => 'วิภา รักดี',
-            'status' => 'done',
-        ],
-        [
-            'id' => 'APT-003',
-            'date' => $today->format('Y-m-d'),
-            'time' => '10:00',
-            'owner' => 'ประสิทธิ์ สุขดี',
-            'pet' => 'แจ็ค',
-            'service' => 'รักษาโรคผิวหนัง',
-            'staff' => 'วิภา รักดี',
-            'status' => 'serving',
-        ],
-        [
-            'id' => 'APT-004',
-            'date' => $today->format('Y-m-d'),
-            'time' => '11:00',
-            'owner' => 'สมศักดิ์ ใจดี',
-            'pet' => 'บาสโก้',
-            'service' => 'ตรวจฟัน',
-            'staff' => 'ประยุทธ์ สวยงาม',
-            'status' => 'waiting',
-        ],
-        [
-            'id' => 'APT-005',
-            'date' => $today->format('Y-m-d'),
-            'time' => '13:00',
-            'owner' => 'บุญมี รักสวย',
-            'pet' => 'ดาว',
-            'service' => 'ทำหมัน',
-            'staff' => 'วิภา รักดี',
-            'status' => 'waiting',
-        ],
-        [
-            'id' => 'APT-006',
-            'date' => $today->copy()->addDay()->format('Y-m-d'),
-            'time' => '09:00',
-            'owner' => 'สุดา มีแก้ว',
-            'pet' => 'ลัคกี้',
-            'service' => 'ติดตามอาการ',
-            'staff' => 'ประยุทธ์ สวยงาม',
-            'status' => 'confirmed',
-        ],
-    ];
-
-    // ===================================
-    // 2. DISPLAY SETTINGS
-    // ===================================
-
+    // ป้ายสถานะที่ใช้แสดง/กรอง (waiting/serving คำนวณจากข้อมูลจริง)
     $statusLabels = [
-        'all' => 'ทุกสถานะ',
+        'all'       => 'ทุกสถานะ',
         'confirmed' => 'นัดหมาย',
-        'waiting' => 'รอรับบริการ',
-        'serving' => 'กำลังรับบริการ',
-        'done' => 'เสร็จสิ้น',
+        'waiting'   => 'รอรับบริการ',
+        'serving'   => 'รอชำระเงิน',
+        'done'      => 'เสร็จสิ้น',
         'cancelled' => 'ยกเลิก',
     ];
 
-    $thaiMonths = [
-        1 => 'มกราคม', 'กุมภาพันธ์', 'มีนาคม',
-        'เมษายน', 'พฤษภาคม', 'มิถุนายน',
-        'กรกฎาคม', 'สิงหาคม', 'กันยายน',
-        'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
-    ];
+    // ค่าที่ DB เก็บได้จริง (ใช้ใน dropdown แก้ไข)
+    $editStatusLabels = ['scheduled' => 'นัดหมาย', 'completed' => 'เสร็จสิ้น', 'cancelled' => 'ยกเลิก'];
 
-    $thaiDays = [
-        'อาทิตย์', 'จันทร์', 'อังคาร',
-        'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'
-    ];
+    $thaiMonths = [1=>'มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
 
-    $todayThai =
-        'วัน' . $thaiDays[$today->dayOfWeek] .
-        'ที่ ' . $today->day . ' ' .
-        $thaiMonths[$today->month] . ' ' .
-        ($today->year + 543);
-
-    // ===================================
-    // 3. URL PARAMETERS
-    // ===================================
-
-    $view = request('view') === 'calendar'
-        ? 'calendar'
-        : 'list';
-
-    $search = trim((string) request('search', ''));
-
-    $status = request('status', 'all');
-
-    if (!array_key_exists($status, $statusLabels)) {
-        $status = 'all';
-    }
-
-    $selectedDate = request('date');
-
-    if ($selectedDate) {
-        $parsedDate = \DateTime::createFromFormat(
-            '!Y-m-d',
-            $selectedDate
-        );
-
-        if (
-            !$parsedDate ||
-            $parsedDate->format('Y-m-d') !== $selectedDate
-        ) {
-            $selectedDate = null;
-        }
-    }
-
-    // ===================================
-    // 4. FILTER MOCK DATA
-    // ===================================
-
-    $filtered = array_values(array_filter(
-        $appointments,
-        function ($item) use ($search, $status, $selectedDate) {
-
-            $searchText =
-                $item['id'] . ' ' .
-                $item['owner'] . ' ' .
-                $item['pet'] . ' ' .
-                $item['service'];
-
-            $matchSearch =
-                $search === '' ||
-                mb_stripos($searchText, $search) !== false;
-
-            $matchStatus =
-                $status === 'all' ||
-                $item['status'] === $status;
-
-            $matchDate =
-                !$selectedDate ||
-                $item['date'] === $selectedDate;
-
-            return $matchSearch &&
-                   $matchStatus &&
-                   $matchDate;
-        }
-    ));
-
-    // ===================================
-    // 5. CREATE / EDIT / CANCEL UI
-    // ===================================
-
-    $panel = request('panel');
-    $editing = null;
-
-    if (in_array($panel, ['edit', 'cancel'], true)) {
-        foreach ($appointments as $item) {
-            if ($item['id'] === request('id')) {
-                $editing = $item;
-                break;
-            }
-        }
-    }
-
-    // ===================================
-    // 6. CALENDAR
-    // ===================================
-
-    $monthInput = request(
-        'month',
-        $today->format('Y-m')
-    );
-
-    if (
-        !is_string($monthInput) ||
-        !preg_match(
-            '/^\d{4}-(0[1-9]|1[0-2])$/',
-            $monthInput
-        )
-    ) {
-        $monthInput = $today->format('Y-m');
-    }
-
-    $monthStart = \Carbon\Carbon::create(
-        (int) substr($monthInput, 0, 4),
-        (int) substr($monthInput, 5, 2),
-        1
-    );
-
-    $monthTitle =
-        $thaiMonths[$monthStart->month] .
-        ' ' .
-        ($monthStart->year + 543);
-
+    // ปฏิทิน
+    $monthParam = (is_string($monthInput) && preg_match('/^\d{4}-(0[1-9]|1[0-2])$/', $monthInput)) ? $monthInput : $today->format('Y-m');
+    $monthStart = \Carbon\Carbon::create((int) substr($monthParam, 0, 4), (int) substr($monthParam, 5, 2), 1);
+    $monthTitle = $thaiMonths[$monthStart->month] . ' ' . ($monthStart->year + 543);
     $leadingDays = $monthStart->dayOfWeek;
+    $totalCells = (int) ceil(($leadingDays + $monthStart->daysInMonth) / 7) * 7;
 
-    $totalCells = (int) ceil(
-        ($leadingDays + $monthStart->daysInMonth) / 7
-    ) * 7;
-
-    $appointmentDates = array_column(
-        $appointments,
-        'date'
-    );
+    $isEdit = $panel === 'edit';
+    $showForm = $panel === 'create' || ($isEdit && $editing);
+    $val = fn ($key, $default = '') => old($key, $isEdit ? ($editing[$key] ?? $default) : $default);
 @endphp
-
 
 @section('content')
 
 <div class="appt-page">
 
-    <!-- HEADER -->
-
     <header class="appt-topbar">
-
         <h1>ตารางนัดหมาย</h1>
-
         <div class="appt-topbar-right">
-
-            <span></span>
-
-            <span class="appt-bell">
-                🔔
-                <b>3</b>
-            </span>
-
+            <span>{{ $thaiDate }}</span>
+            <span class="appt-bell">🔔<b>3</b></span>
         </div>
-
     </header>
-
 
     <div class="appt-content">
 
+        @if (session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
+        @if (session('error'))<div class="alert alert-danger">{{ session('error') }}</div>@endif
 
         <div class="appt-toolbar">
-
             <nav class="appt-tabs">
-
-                <a
-                    href="{{ route('vetcare.staff.appointments') }}"
-                    class="appt-tab {{ $view === 'list' ? 'active' : '' }}"
-                >
-                    ▤ รายการ
-                </a>
-
-                <a
-                    href="{{ route('vetcare.staff.appointments', [
-                        'view' => 'calendar'
-                    ]) }}"
-                    class="appt-tab {{ $view === 'calendar' ? 'active' : '' }}"
-                >
-                    📅 ปฏิทิน
-                </a>
-
+                <a href="{{ route('vetcare.staff.appointments') }}" class="appt-tab {{ $view === 'list' ? 'active' : '' }}">▤ รายการ</a>
+                <a href="{{ route('vetcare.staff.appointments', ['view' => 'calendar']) }}" class="appt-tab {{ $view === 'calendar' ? 'active' : '' }}">📅 ปฏิทิน</a>
             </nav>
 
-
-            <a
-                href="{{ route('vetcare.staff.appointments', [
-                    'view' => $view,
-                    'panel' => 'create'
-                ]) }}#appointment-form"
-                class="appt-create-btn"
-            >
-                + สร้างนัดหมาย
-            </a>
-
+            <a href="{{ route('vetcare.staff.appointments', ['view' => $view, 'panel' => 'create']) }}#appointment-form" class="appt-create-btn">+ สร้างนัดหมาย</a>
         </div>
 
 
-        @if (
-            $panel === 'create' ||
-            ($panel === 'edit' && $editing)
-        )
-
-            @php
-                $isEdit = $panel === 'edit';
-            @endphp
-
-            <section
-                class="appt-card appt-form-panel"
-                id="appointment-form"
-            >
-
+        {{-- ================= CREATE / EDIT FORM ================= --}}
+        @if ($showForm)
+            <section class="appt-card appt-form-panel" id="appointment-form">
                 <div class="appt-card-header">
-
-                    <h2>
-                        {{ $isEdit
-                            ? 'แก้ไขนัดหมาย ' . $editing['id']
-                            : 'สร้างนัดหมายใหม่'
-                        }}
-                    </h2>
-
-                    <a
-                        href="{{ route('vetcare.staff.appointments') }}"
-                        class="appt-small-btn"
-                    >
-                        ปิด
-                    </a>
-
+                    <h2>{{ $isEdit ? 'แก้ไขนัดหมาย ' . $editing['id'] : 'สร้างนัดหมายใหม่' }}</h2>
+                    <a href="{{ route('vetcare.staff.appointments') }}" class="appt-small-btn">ปิด</a>
                 </div>
 
+                <form method="POST"
+                      action="{{ $isEdit ? route('vetcare.staff.appointments.update', $editing['id']) : route('vetcare.staff.appointments.store') }}">
+                    @csrf
+                    @if ($isEdit) @method('PUT') @endif
 
-                <div class="row g-3">
+                    @if ($errors->any())
+                        <div class="alert alert-danger py-2">
+                            @foreach ($errors->all() as $error)<div>{{ $error }}</div>@endforeach
+                        </div>
+                    @endif
 
-                    <div class="col-md-6">
-                        <label class="form-label">
-                            ชื่อเจ้าของ
-                        </label>
-
-                        <input
-                            type="text"
-                            class="form-control"
-                            value="{{ $isEdit ? $editing['owner'] : '' }}"
-                            placeholder="ชื่อ-นามสกุล"
-                        >
-                    </div>
-
-
-                    <div class="col-md-6">
-                        <label class="form-label">
-                            ชื่อสัตว์เลี้ยง
-                        </label>
-
-                        <input
-                            type="text"
-                            class="form-control"
-                            value="{{ $isEdit ? $editing['pet'] : '' }}"
-                            placeholder="ชื่อสัตว์เลี้ยง"
-                        >
-                    </div>
-
-
-                    <div class="col-md-6">
-                        <label class="form-label">
-                            วันที่นัดหมาย
-                        </label>
-
-                        <input
-                            type="date"
-                            class="form-control"
-                            value="{{ $isEdit
-                                ? $editing['date']
-                                : $today->format('Y-m-d')
-                            }}"
-                        >
-                    </div>
-
-
-                    <div class="col-md-6">
-                        <label class="form-label">
-                            เวลา
-                        </label>
-
-                        <input
-                            type="time"
-                            class="form-control"
-                            value="{{ $isEdit
-                                ? $editing['time']
-                                : '09:00'
-                            }}"
-                        >
-                    </div>
-
-
-                    <div class="col-md-6">
-                        <label class="form-label">
-                            ประเภทบริการ
-                        </label>
-
-                        <select class="form-select">
-
-                            @foreach ([
-                                'ตรวจทั่วไป',
-                                'ฉีดวัคซีน',
-                                'รักษาโรคผิวหนัง',
-                                'ตรวจฟัน',
-                                'ทำหมัน',
-                                'ติดตามอาการ'
-                            ] as $service)
-
-                                <option
-                                    {{ $isEdit &&
-                                       $editing['service'] === $service
-                                        ? 'selected'
-                                        : ''
-                                    }}
-                                >
-                                    {{ $service }}
-                                </option>
-
-                            @endforeach
-
-                        </select>
-                    </div>
-
-
-                    <div class="col-md-6">
-                        <label class="form-label">
-                            พนักงาน
-                        </label>
-
-                        <select class="form-select">
-
-                            <option>
-                                วิภา รักดี
-                            </option>
-
-                            <option>
-                                ประยุทธ์ สวยงาม
-                            </option>
-
-                        </select>
-                    </div>
-
-
-                    @if ($isEdit)
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">สัตว์เลี้ยง (เจ้าของ)</label>
+                            <select name="pet_id" class="form-select" required>
+                                <option value="">-- เลือกสัตว์เลี้ยง --</option>
+                                @foreach ($pets as $pet)
+                                    <option value="{{ $pet->pet_id }}" @selected($val('pet_id') === $pet->pet_id)>
+                                        {{ $pet->pet_name }} ({{ trim($pet->first_name . ' ' . $pet->last_name) }})
+                                    </option>
+                                @endforeach
+                            </select>
+                            <small class="text-muted">ยังไม่มีสัตว์เลี้ยง? เพิ่มได้ที่หน้า <a href="{{ route('vetcare.staff.owners') }}">เจ้าของสัตว์</a></small>
+                        </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">
-                                สถานะ
-                            </label>
-
-                            <select class="form-select">
-
-                                @foreach ([
-                                    'confirmed',
-                                    'waiting',
-                                    'serving',
-                                    'done'
-                                ] as $key)
-
-                                    <option
-                                        {{ $editing['status'] === $key
-                                            ? 'selected'
-                                            : ''
-                                        }}
-                                    >
-                                        {{ $statusLabels[$key] }}
-                                    </option>
-
+                            <label class="form-label">พนักงาน / สัตวแพทย์</label>
+                            <select name="staff_id" class="form-select" required>
+                                <option value="">-- เลือกพนักงาน --</option>
+                                @foreach ($staffList as $s)
+                                    <option value="{{ $s->user_id }}" @selected($val('staff_id') === $s->user_id)>{{ $s->full_name }}</option>
                                 @endforeach
-
                             </select>
                         </div>
 
-                    @endif
+                        <div class="col-md-6">
+                            <label class="form-label">วันที่นัดหมาย</label>
+                            <input type="date" name="appointment_date" class="form-control" value="{{ old('appointment_date', $isEdit ? $editing['date'] : ($selectedDate ?: $today->format('Y-m-d'))) }}" required>
+                        </div>
 
-                </div>
+                        <div class="col-md-6">
+                            <label class="form-label">เวลา</label>
+                            <input type="time" name="appointment_time" class="form-control" value="{{ old('appointment_time', $isEdit ? $editing['time'] : '09:00') }}" required>
+                        </div>
 
+                        <div class="col-md-6">
+                            <label class="form-label">ประเภทบริการ</label>
+                            <select name="service_type" class="form-select" required>
+                                @php $currentService = old('service_type', $isEdit ? $editing['service'] : ''); @endphp
+                                @foreach ($services as $service)
+                                    <option value="{{ $service }}" @selected($currentService === $service)>{{ $service }}</option>
+                                @endforeach
+                                @if ($currentService && ! in_array($currentService, $services, true))
+                                    <option value="{{ $currentService }}" selected>{{ $currentService }}</option>
+                                @endif
+                            </select>
+                        </div>
 
-                <div class="appt-form-actions">
+                        @if ($isEdit)
+                            <div class="col-md-6">
+                                <label class="form-label">สถานะ</label>
+                                <select name="status" class="form-select">
+                                    @foreach ($editStatusLabels as $key => $label)
+                                        <option value="{{ $key }}" @selected(old('status', $editing['raw_status']) === $key)>{{ $label }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
 
-                    <a
-                        href="{{ route('vetcare.staff.appointments') }}"
-                        class="btn btn-outline-secondary btn-sm"
-                    >
-                        ยกเลิก
-                    </a>
+                        <div class="col-12">
+                            <label class="form-label">หมายเหตุ</label>
+                            <textarea name="notes" class="form-control" rows="2" maxlength="500">{{ old('notes', $isEdit ? $editing['notes'] : '') }}</textarea>
+                        </div>
+                    </div>
 
-                    <button
-                        type="button"
-                        class="btn btn-secondary btn-sm"
-                        disabled
-                    >
-                        บันทึก (UI เท่านั้น)
-                    </button>
-
-                </div>
-
+                    <div class="appt-form-actions">
+                        <a href="{{ route('vetcare.staff.appointments') }}" class="btn btn-outline-secondary btn-sm">ยกเลิก</a>
+                        <button type="submit" class="btn btn-primary btn-sm">{{ $isEdit ? 'บันทึกการแก้ไข' : 'บันทึกนัดหมาย' }}</button>
+                    </div>
+                </form>
             </section>
-
         @endif
 
 
-
+        {{-- ================= CANCEL CONFIRM ================= --}}
         @if ($panel === 'cancel' && $editing)
-
-            <section
-                class="appt-card appt-confirm"
-                id="appointment-form"
-            >
-
+            <section class="appt-card appt-confirm" id="appointment-form">
                 <h2>ยืนยันการยกเลิกนัดหมาย</h2>
+                <p>{{ $editing['id'] }} — {{ $editing['pet'] }} ({{ $editing['owner'] }})</p>
 
-                <p>
-                    {{ $editing['id'] }} —
-                    {{ $editing['pet'] }}
-                    ({{ $editing['owner'] }})
-                </p>
-
-                <a
-                    href="{{ route('vetcare.staff.appointments') }}"
-                    class="btn btn-outline-secondary btn-sm"
-                >
-                    กลับ
-                </a>
-
-                <button
-                    type="button"
-                    class="btn btn-secondary btn-sm"
-                    disabled
-                >
-                    ยืนยันยกเลิก (UI เท่านั้น)
-                </button>
-
+                <form method="POST" action="{{ route('vetcare.staff.appointments.cancel', $editing['id']) }}">
+                    @csrf
+                    @method('PUT')
+                    <a href="{{ route('vetcare.staff.appointments') }}" class="btn btn-outline-secondary btn-sm">กลับ</a>
+                    <button type="submit" class="btn btn-danger btn-sm">ยืนยันยกเลิก</button>
+                </form>
             </section>
-
         @endif
+
 
         @if ($view === 'list')
 
             <section class="appt-card">
-
                 <div class="appt-card-header appt-list-header">
-
                     <h2>
-                        {{ $selectedDate
-                            ? 'รายการนัดหมายวันที่ ' .
-                              date('d/m/Y', strtotime($selectedDate))
-                            : 'รายการนัดหมายทั้งหมด'
-                        }}
+                        {{ $selectedDate ? 'รายการนัดหมายวันที่ ' . date('d/m/Y', strtotime($selectedDate)) : 'รายการนัดหมายทั้งหมด' }}
                     </h2>
 
-
-                    <!-- SEARCH -->
-
-                    <form
-                        method="GET"
-                        action="{{ route('vetcare.staff.appointments') }}"
-                        class="appt-filters"
-                    >
-
-                        <input
-                            type="hidden"
-                            name="view"
-                            value="list"
-                        >
-
-                        @if ($selectedDate)
-                            <input
-                                type="hidden"
-                                name="date"
-                                value="{{ $selectedDate }}"
-                            >
-                        @endif
-
+                    <form method="GET" action="{{ route('vetcare.staff.appointments') }}" class="appt-filters">
+                        <input type="hidden" name="view" value="list">
+                        @if ($selectedDate)<input type="hidden" name="date" value="{{ $selectedDate }}">@endif
 
                         <div class="appt-search-wrap">
-
                             <span>⌕</span>
-
-                            <input
-                                type="text"
-                                name="search"
-                                value="{{ $search }}"
-                                placeholder="ค้นหาเจ้าของ / สัตว์..."
-                            >
-
+                            <input type="text" name="search" value="{{ $search }}" placeholder="ค้นหาเจ้าของ / สัตว์...">
                         </div>
 
-
                         <select name="status">
-
                             @foreach ($statusLabels as $key => $label)
-
-                                <option
-                                    value="{{ $key }}"
-                                    {{ $status === $key
-                                        ? 'selected'
-                                        : ''
-                                    }}
-                                >
-                                    {{ $label }}
-                                </option>
-
+                                <option value="{{ $key }}" @selected($status === $key)>{{ $label }}</option>
                             @endforeach
-
                         </select>
 
-
-                        <button
-                            type="submit"
-                            class="appt-filter-btn"
-                        >
-                            ค้นหา
-                        </button>
-
-
-                        <a
-                            href="{{ route('vetcare.staff.appointments') }}"
-                            class="appt-small-btn"
-                        >
-                            ล้าง
-                        </a>
-
+                        <button type="submit" class="appt-filter-btn">ค้นหา</button>
+                        <a href="{{ route('vetcare.staff.appointments') }}" class="appt-small-btn">ล้าง</a>
                     </form>
-
                 </div>
 
-
-                <!-- TABLE -->
-
                 <div class="table-responsive">
-
                     <table class="table appt-table">
-
                         <thead>
                             <tr>
                                 <th>รหัส</th>
@@ -644,276 +214,91 @@
                                 <th>จัดการ</th>
                             </tr>
                         </thead>
-
-
                         <tbody>
-
                             @forelse ($filtered as $item)
-
                                 <tr>
-
-                                    <td class="appt-id">
-                                        {{ $item['id'] }}
-                                    </td>
-
+                                    <td class="appt-id">{{ $item['id'] }}</td>
                                     <td class="appt-date-cell">
-
-                                        <span>
-                                            {{ date(
-                                                'd/m/Y',
-                                                strtotime($item['date'])
-                                            ) }}
-                                        </span>
-
-                                        <strong>
-                                            {{ $item['time'] }}
-                                        </strong>
-
+                                        <span>{{ date('d/m/Y', strtotime($item['date'])) }}</span>
+                                        <strong>{{ $item['time'] }}</strong>
                                     </td>
-
                                     <td>{{ $item['owner'] }}</td>
-
                                     <td>{{ $item['pet'] }}</td>
-
                                     <td>{{ $item['service'] }}</td>
-
                                     <td>{{ $item['staff'] }}</td>
-
-
                                     <td>
-                                        <span
-                                            class="appt-status status-{{ $item['status'] }}"
-                                        >
-                                            {{ $statusLabels[$item['status']] }}
-                                        </span>
+                                        <span class="appt-status status-{{ $item['status'] }}">{{ $statusLabels[$item['status']] }}</span>
                                     </td>
-
-
                                     <td>
-
                                         <div class="appt-row-actions">
-
-                                            <a
-                                                class="appt-edit-btn"
-                                                href="{{ route(
-                                                    'vetcare.staff.appointments',
-                                                    [
-                                                        'panel' => 'edit',
-                                                        'id' => $item['id']
-                                                    ]
-                                                ) }}#appointment-form"
-                                            >
-                                                แก้ไข
-                                            </a>
-
-
-                                            @if ($item['status'] !== 'done')
-
-                                                <a
-                                                    class="appt-cancel-btn"
-                                                    href="{{ route(
-                                                        'vetcare.staff.appointments',
-                                                        [
-                                                            'panel' => 'cancel',
-                                                            'id' => $item['id']
-                                                        ]
-                                                    ) }}#appointment-form"
-                                                >
-                                                    ยกเลิก
-                                                </a>
-
+                                            @if ($item['raw_status'] === 'scheduled' && ! in_array($item['status'], ['serving'], true))
+                                                <a class="appt-edit-btn" href="{{ route('vetcare.staff.treatments', ['appointment' => $item['id']]) }}">รักษา</a>
                                             @endif
 
+                                            <a class="appt-edit-btn" href="{{ route('vetcare.staff.appointments', ['panel' => 'edit', 'id' => $item['id']]) }}#appointment-form">แก้ไข</a>
+
+                                            @if ($item['raw_status'] === 'scheduled')
+                                                <a class="appt-cancel-btn" href="{{ route('vetcare.staff.appointments', ['panel' => 'cancel', 'id' => $item['id']]) }}#appointment-form">ยกเลิก</a>
+                                            @endif
                                         </div>
-
                                     </td>
-
                                 </tr>
-
-
                             @empty
-
-                                <tr>
-                                    <td
-                                        colspan="8"
-                                        class="appt-no-data"
-                                    >
-                                        ไม่พบข้อมูลนัดหมาย
-                                    </td>
-                                </tr>
-
+                                <tr><td colspan="8" class="appt-no-data">ไม่พบข้อมูลนัดหมาย</td></tr>
                             @endforelse
-
                         </tbody>
-
                     </table>
-
                 </div>
 
-
-                <div class="appt-table-footer">
-                    แสดง {{ count($filtered) }} รายการ
-                </div>
-
+                <div class="appt-table-footer">แสดง {{ count($filtered) }} รายการ</div>
             </section>
-
 
         @else
 
-            <!-- MONTHLY CALENDAR -->
-
+            {{-- ================= CALENDAR ================= --}}
             <section class="appt-card appt-calendar-panel">
-
                 <div class="appt-card-header appt-calendar-header">
-
-                    <h2>
-                        ปฏิทินนัดหมาย — {{ $monthTitle }}
-                    </h2>
-
+                    <h2>ปฏิทินนัดหมาย — {{ $monthTitle }}</h2>
 
                     <div class="appt-calendar-nav">
-
-                        <a
-                            href="{{ route(
-                                'vetcare.staff.appointments',
-                                [
-                                    'view' => 'calendar',
-                                    'month' => $monthStart
-                                        ->copy()
-                                        ->subMonth()
-                                        ->format('Y-m')
-                                ]
-                            ) }}"
-                        >
-                            ‹
-                        </a>
-
-
-                        <a
-                            href="{{ route(
-                                'vetcare.staff.appointments',
-                                [
-                                    'view' => 'calendar',
-                                    'month' => $today->format('Y-m')
-                                ]
-                            ) }}"
-                        >
-                            เดือนนี้
-                        </a>
-
-
-                        <a
-                            href="{{ route(
-                                'vetcare.staff.appointments',
-                                [
-                                    'view' => 'calendar',
-                                    'month' => $monthStart
-                                        ->copy()
-                                        ->addMonth()
-                                        ->format('Y-m')
-                                ]
-                            ) }}"
-                        >
-                            ›
-                        </a>
-
+                        <a href="{{ route('vetcare.staff.appointments', ['view' => 'calendar', 'month' => $monthStart->copy()->subMonth()->format('Y-m')]) }}">‹</a>
+                        <a href="{{ route('vetcare.staff.appointments', ['view' => 'calendar', 'month' => $today->format('Y-m')]) }}">เดือนนี้</a>
+                        <a href="{{ route('vetcare.staff.appointments', ['view' => 'calendar', 'month' => $monthStart->copy()->addMonth()->format('Y-m')]) }}">›</a>
                     </div>
-
                 </div>
-
 
                 <div class="appt-calendar-grid">
-
-                    <!-- WEEK DAYS -->
-
-                    @foreach ([
-                        'อา', 'จ', 'อ', 'พ',
-                        'พฤ', 'ศ', 'ส'
-                    ] as $dayLabel)
-
-                        <div class="appt-weekday">
-                            {{ $dayLabel }}
-                        </div>
-
+                    @foreach (['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'] as $dayLabel)
+                        <div class="appt-weekday">{{ $dayLabel }}</div>
                     @endforeach
 
-
-                    <!-- MONTH DAYS -->
-
                     @for ($i = 0; $i < $totalCells; $i++)
-
                         @php
                             $dayNumber = $i - $leadingDays + 1;
-
-                            $validDay =
-                                $dayNumber >= 1 &&
-                                $dayNumber <= $monthStart->daysInMonth;
-
-                            $cellDate = $validDay
-                                ? $monthStart
-                                    ->copy()
-                                    ->day($dayNumber)
-                                    ->format('Y-m-d')
-                                : null;
-
-                            $hasAppointment =
-                                $cellDate &&
-                                in_array(
-                                    $cellDate,
-                                    $appointmentDates
-                                );
-
-                            $isToday =
-                                $cellDate === $today->format('Y-m-d');
+                            $validDay = $dayNumber >= 1 && $dayNumber <= $monthStart->daysInMonth;
+                            $cellDate = $validDay ? $monthStart->copy()->day($dayNumber)->format('Y-m-d') : null;
+                            $hasAppointment = $cellDate && in_array($cellDate, $appointmentDates, true);
+                            $isToday = $cellDate === $today->format('Y-m-d');
                         @endphp
 
-
                         <div class="appt-calendar-cell">
-
                             @if ($validDay)
-
-                                <a
-                                    href="{{ route(
-                                        'vetcare.staff.appointments',
-                                        [
-                                            'view' => 'list',
-                                            'date' => $cellDate
-                                        ]
-                                    ) }}"
-                                    class="appt-day-number {{ $isToday
-                                        ? 'selected'
-                                        : ''
-                                    }}"
-                                >
-
+                                <a href="{{ route('vetcare.staff.appointments', ['view' => 'list', 'date' => $cellDate]) }}"
+                                   class="appt-day-number {{ $isToday ? 'selected' : '' }}">
                                     {{ $dayNumber }}
-
-
-                                    @if ($hasAppointment)
-                                        <span class="appt-dot"></span>
-                                    @endif
-
+                                    @if ($hasAppointment)<span class="appt-dot"></span>@endif
                                 </a>
-
                             @endif
-
                         </div>
-
                     @endfor
-
                 </div>
 
-
-                <p class="appt-calendar-help">
-                    จุดสีเขียว = มีนัดหมาย • กดวันที่เพื่อดูรายการ
-                </p>
-
+                <p class="appt-calendar-help">จุดสีเขียว = มีนัดหมาย • กดวันที่เพื่อดูรายการ</p>
             </section>
 
         @endif
 
     </div>
-
 </div>
 
 @endsection
