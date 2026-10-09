@@ -10,299 +10,9 @@
     >
 @endpush
 
-
-@php
-
-    /* =========================================
-       DATE
-    ========================================= */
-
-    $today = now('Asia/Bangkok');
-
-    $thaiMonths = [
-        1 => 'มกราคม',
-        2 => 'กุมภาพันธ์',
-        3 => 'มีนาคม',
-        4 => 'เมษายน',
-        5 => 'พฤษภาคม',
-        6 => 'มิถุนายน',
-        7 => 'กรกฎาคม',
-        8 => 'สิงหาคม',
-        9 => 'กันยายน',
-        10 => 'ตุลาคม',
-        11 => 'พฤศจิกายน',
-        12 => 'ธันวาคม',
-    ];
-
-    $thaiDays = [
-        'อาทิตย์',
-        'จันทร์',
-        'อังคาร',
-        'พุธ',
-        'พฤหัสบดี',
-        'ศุกร์',
-        'เสาร์',
-    ];
-
-    $thaiDate =
-        'วัน' .
-        $thaiDays[$today->dayOfWeek] .
-        'ที่ ' .
-        $today->day .
-        ' ' .
-        $thaiMonths[$today->month] .
-        ' ' .
-        ($today->year + 543);
-
-
-    /* =========================================
-       REVENUE PERIOD
-    ========================================= */
-
-    $revenuePeriod = request('period') === 'daily'
-        ? 'daily'
-        : 'monthly';
-
-
-    /* =========================================
-       DAILY REVENUE
-    ========================================= */
-
-    $dailyRevenues = [
-
-        [
-            'label' => 'จ.',
-            'amount' => '12.5K',
-            'height' => 42,
-        ],
-
-        [
-            'label' => 'อ.',
-            'amount' => '18.2K',
-            'height' => 62,
-        ],
-
-        [
-            'label' => 'พ.',
-            'amount' => '15.8K',
-            'height' => 53,
-        ],
-
-        [
-            'label' => 'พฤ.',
-            'amount' => '21.4K',
-            'height' => 73,
-        ],
-
-        [
-            'label' => 'ศ.',
-            'amount' => '24.8K',
-            'height' => 86,
-        ],
-
-        [
-            'label' => 'ส.',
-            'amount' => '19.6K',
-            'height' => 67,
-        ],
-
-        [
-            'label' => 'อา.',
-            'amount' => '18.4K',
-            'height' => 63,
-        ],
-
-    ];
-
-
-    /* =========================================
-       MONTHLY REVENUE
-    ========================================= */
-
-    $monthlyRevenues = [
-
-        [
-            'label' => 'พ.ค.',
-            'amount' => '195K',
-            'height' => 50,
-        ],
-
-        [
-            'label' => 'มิ.ย.',
-            'amount' => '260K',
-            'height' => 67,
-        ],
-
-        [
-            'label' => 'ก.ค.',
-            'amount' => '310K',
-            'height' => 84,
-        ],
-
-        [
-            'label' => 'ส.ค.',
-            'amount' => '275K',
-            'height' => 72,
-        ],
-
-        [
-            'label' => 'ก.ย.',
-            'amount' => '284K',
-            'height' => 76,
-        ],
-
-    ];
-
-
-    /* =========================================
-       SELECT REVENUE DATA
-    ========================================= */
-
-    $revenues = $revenuePeriod === 'daily'
-        ? $dailyRevenues
-        : $monthlyRevenues;
-
-
-    /* =========================================
-       STOCK ALERTS
-    ========================================= */
-
-    $stockAlerts = [
-
-        [
-            'name' => 'Amoxicillin 250mg',
-            'stock' => '8 เม็ด',
-            'status' => 'low',
-            'label' => 'ใกล้หมด',
-        ],
-
-        [
-            'name' => 'Prednisolone 5mg',
-            'stock' => '0 เม็ด',
-            'status' => 'out',
-            'label' => 'หมดสต็อก',
-        ],
-
-        [
-            'name' => 'Ivermectin 1%',
-            'stock' => '12 ml',
-            'status' => 'low',
-            'label' => 'ใกล้หมด',
-        ],
-
-        [
-            'name' => 'Metronidazole 200mg',
-            'stock' => '0 เม็ด',
-            'status' => 'out',
-            'label' => 'หมดสต็อก',
-        ],
-
-        [
-            'name' => 'Dexamethasone Injection',
-            'stock' => '5 ขวด',
-            'status' => 'low',
-            'label' => 'ใกล้หมด',
-        ],
-
-    ];
-
-
-    /* =========================================
-       RECENT TRANSACTIONS
-    ========================================= */
-
-    $transactions = [
-
-        [
-            'invoice' => 'INV-2026-089',
-            'owner' => 'วิชัย สมใจ',
-            'pet' => 'มะม่วง',
-            'petType' => 'สุนัข',
-            'amount' => 1850,
-            'method' => 'เงินสด',
-            'status' => 'paid',
-        ],
-
-        [
-            'invoice' => 'INV-2026-088',
-            'owner' => 'พิมพ์ใจ ดีงาม',
-            'pet' => 'มุก',
-            'petType' => 'แมว',
-            'amount' => 3200,
-            'method' => 'โอนเงิน',
-            'status' => 'paid',
-        ],
-
-        [
-            'invoice' => 'INV-2026-087',
-            'owner' => 'ประสิทธิ์ สุขดี',
-            'pet' => 'แจ็ค',
-            'petType' => 'สุนัข',
-            'amount' => 920,
-            'method' => 'เงินสด',
-            'status' => 'waiting',
-        ],
-
-        [
-            'invoice' => 'INV-2026-086',
-            'owner' => 'บุญมี รักสวย',
-            'pet' => 'ดาว',
-            'petType' => 'แมว',
-            'amount' => 2450,
-            'method' => 'โอนเงิน',
-            'status' => 'paid',
-        ],
-
-        [
-            'invoice' => 'INV-2026-085',
-            'owner' => 'สมศักดิ์ ใจดี',
-            'pet' => 'บาสโก้',
-            'petType' => 'สุนัข',
-            'amount' => 5600,
-            'method' => 'เงินสด',
-            'status' => 'cancelled',
-        ],
-
-    ];
-
-
-    /* =========================================
-       RECENT ACTIVITIES
-    ========================================= */
-
-    $activities = [
-
-        [
-            'time' => '09:15',
-            'text' => 'วิภา รักดี บันทึกการรักษา มะม่วง',
-        ],
-
-        [
-            'time' => '10:30',
-            'text' => 'ออกใบเสร็จ INV-2026-089',
-        ],
-
-        [
-            'time' => '11:00',
-            'text' => 'เพิ่มสัตว์เลี้ยงใหม่ มุก',
-        ],
-
-        [
-            'time' => '13:45',
-            'text' => 'จ่ายยา Amoxicillin จำนวน 20 เม็ด',
-        ],
-
-        [
-            'time' => '14:20',
-            'text' => 'ยกเลิกใบเสร็จ INV-2026-085',
-        ],
-
-    ];
-
-@endphp
-
-
 @section('content')
+
+
 
 <div class="manager-dashboard-page">
 
@@ -620,8 +330,6 @@
 
 
                     <div class="stock-alert-list">
-
-
                         @foreach ($stockAlerts as $medicine)
 
                             <div class="stock-alert-item">
@@ -648,7 +356,7 @@
                                            stock-{{ $medicine['status'] }}"
                                 >
 
-                                    {{ $medicine['label'] }}
+                                    {{$medicine['status'] === 'low' ? 'ใกล้หมด' : 'หมดสต็อก'}}
 
                                 </span>
 
@@ -780,7 +488,7 @@
                                                 class="invoice-link"
                                             >
 
-                                                {{ $transaction['invoice'] }}
+                                                {{ $transaction['invoice_number'] }}
 
                                             </a>
 
@@ -841,7 +549,7 @@
                                                 </span>
 
 
-                                            @elseif ($transaction['status'] === 'waiting')
+                                            @elseif ($transaction['status'] === 'unpaid')
 
                                                 <span
                                                     class="transaction-status

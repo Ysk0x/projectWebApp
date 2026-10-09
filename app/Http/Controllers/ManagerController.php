@@ -13,32 +13,33 @@ class ManagerController extends Controller
 {
     public function dashboard(Request $request)
     {
-        // 1. วันที่ปัจจุบันภาษาไทย
         $today = Carbon::now('Asia/Bangkok');
         $thaiMonths = [1=>'มกราคม',2=>'กุมภาพันธ์',3=>'มีนาคม',4=>'เมษายน',5=>'พฤษภาคม',6=>'มิถุนายน',7=>'กรกฎาคม',8=>'สิงหาคม',9=>'กันยายน',10=>'ตุลาคม',11=>'พฤศจิกายน',12=>'ธันวาคม'];
         $thaiDays = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
         $thaiDate = 'วัน' . $thaiDays[$today->dayOfWeek] . 'ที่ ' . $today->day . ' ' . $thaiMonths[$today->month] . ' ' . ($today->year + 543);
 
-        // 2. ดึงข้อมูลสรุปด้านบน (Summary Cards) จาก Database จริง
-        // รายได้ทั้งหมดที่ชำระแล้ว (paid)
-        $todayRevenue = Invoice::where('status', 'paid')->sum('total_amount');
-        $monthlyRevenueTotal = Invoice::where('status', 'paid')->sum('total_amount');
+
+        $todayRevenue = Invoice::where('status', 'paid')
+            ->whereDate('invoice_date', $today->toDateString())
+            ->sum('total_amount');
+
+        $monthlyRevenueTotal = Invoice::where('status', 'paid')
+            ->whereMonth('invoice_date', $today->month)
+            ->whereYear('invoice_date', $today->year)
+            ->sum('total_amount');
+
+        $petsServedToday = Treatment::whereDate('treatment_date', $today->toDateString())->count();
         
-        // สัตว์รับบริการ (นับจากตาราง treatments)
-        $petsServedToday = Treatment::count();
-        
-        // รอชำระเงิน (status = unpaid)
         $pendingPaymentsCount = Invoice::where('status', 'unpaid')->count();
         
-        // ยาที่จำนวนสต็อกน้อยกว่าหรือเท่ากับจุดเตือน (stock_quantity <= minimum_stock)
         $stockAlertsCount = Medicine::whereColumn('stock_quantity', '<=', 'minimum_stock')->count();
 
-        // 3. กราฟรายได้ (ดึงและรวมยอดจริงจากตาราง invoices ตามวันที่)
+        //มาไงหี request
         $revenuePeriod = $request->query('period', 'daily');
+      
         $revenues = [];
 
         if ($revenuePeriod === 'daily') {
-            // ดึงยอดรายรับตามวันที่มีการบันทึกจริงในฐานข้อมูล
             $dailyList = Invoice::where('status', 'paid')
                 ->selectRaw("DATE(invoice_date) as inv_date, SUM(total_amount) as total")
                 ->groupBy('inv_date')
@@ -77,23 +78,61 @@ class ManagerController extends Controller
             }
         }
 
-        // 4. รายการยาใกล้หมด/หมดสต็อกจริง (ดึงจากตาราง medicines)
-        $stockAlerts = Medicine::whereColumn('stock_quantity', '<=', 'minimum_stock')
+        $stockAlerts = Medicine::where('status', 'active')
+            ->whereColumn('stock_quantity', '<=', 'minimum_stock')
             ->orderBy('stock_quantity', 'asc')
             ->take(5)
-            ->get();
+            ->get()
+            ->map(fn ($m) => [
+                'code'    => $m->medicine_id,
+                'name'    => $m->medicine_name,
+                'unit'    => $m->unit,
+                'stock'   => (int) $m->stock_quantity,
+                'minimum' => (int) $m->minimum_stock,
+                'status'  => (int) $m->stock_quantity <= 0 ? 'out' : 'low',
+            ])->all();
 
-        // 5. รายการใบเสร็จชำระเงินจริง 5 รายการล่าสุด (เชื่อม owner, pet, payments)
+        $methodLabels = ['cash' => 'เงินสด', 'qr_promptpay' => 'โอนเงิน (QR)', 'credit_card' => 'บัตรเครดิต'];
+
         $transactions = Invoice::with(['owner', 'pet', 'payments'])
             ->orderBy('invoice_date', 'desc')
+            ->orderBy('invoice_id', 'desc')
             ->take(5)
-            ->get();
-        // 6. กิจกรรมล่าสุดจริง (ดึงจากตาราง invoice_audits)
-        $activities = InvoiceAudit::orderBy('audited_at', 'desc')
+            ->get()
+            ->map(function ($inv) use ($methodLabels) {
+                $pay = $inv->payments->sortByDesc('payment_date')->first();
+
+                return [
+                    'invoice_number'  => $inv->invoice_number,
+                    'owner'   => trim(($inv->owner->first_name ?? '') . ' ' . ($inv->owner->last_name ?? '')),
+                    'pet'     => $inv->pet->pet_name ?? '-',
+                    'petType' => $inv->pet->species ?? '-',
+                    'amount'  => (float) $inv->total_amount,
+                    'method' => $pay ? ($methodLabels[$pay->payment_method] ?? $pay->payment_method) : '-',
+                    'status'  => $inv->status,  
+                ];
+            })->all();
+        
+        $activities = InvoiceAudit::with(['auditor', 'invoice'])
+            ->orderBy('audited_at', 'desc')
             ->take(5)
-            ->get();
+            ->get()
+            ->map(function ($a) {
+                $action = match (true) {
+                    $a->action === 'discount_applied' => 'ให้ส่วนลดใบเสร็จ',
+                    $a->new_status === 'paid'         => 'รับชำระเงินใบเสร็จ',
+                    $a->new_status === 'cancelled'    => 'ยกเลิกใบเสร็จ',
+                    default                           => 'เปลี่ยนสถานะใบเสร็จ',
+                };
+
+                return [
+                    'time' => Carbon::parse($a->audited_at)->format('d/m H:i'),
+                    'text' => ($a->auditor->full_name ?? 'ไม่ทราบผู้ใช้') . ' ' . $action . ' ' . ($a->invoice->invoice_number ?? ''),
+                ];
+            })->all();
 
         return view('vetcare.manager.dashboard', compact(
+            'revenues',
             'thaiDate',
             'revenuePeriod',
             'todayRevenue',

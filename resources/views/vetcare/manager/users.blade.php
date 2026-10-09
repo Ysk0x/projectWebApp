@@ -171,7 +171,6 @@
                             <label class="form-label">บทบาท (Role)</label>
                             <select name="role" class="form-select">
                                 <option value="staff"   @selected(old('role', 'staff') === 'staff')>พนักงาน (Staff)</option>
-                                <option value="vet"     @selected(old('role') === 'vet')>สัตวแพทย์ (Vet)</option>
                                 <option value="manager" @selected(old('role') === 'manager')>ผู้จัดการ (Manager)</option>
                             </select>
                         </div>
@@ -230,7 +229,6 @@
                             @php $currentRole = old('role', $selectedUser->role); @endphp
                             <select name="role" class="form-select">
                                 <option value="staff"   @selected($currentRole === 'staff')>พนักงาน (Staff)</option>
-                                <option value="vet"     @selected($currentRole === 'vet')>สัตวแพทย์ (Vet)</option>
                                 <option value="manager" @selected($currentRole === 'manager')>ผู้จัดการ (Manager)</option>
                             </select>
                         </div>
