@@ -13,11 +13,8 @@ class ManagerController extends Controller
 {
     public function dashboard(Request $request)
     {
-        $today = Carbon::now('Asia/Bangkok');
-        $thaiMonths = [1=>'มกราคม',2=>'กุมภาพันธ์',3=>'มีนาคม',4=>'เมษายน',5=>'พฤษภาคม',6=>'มิถุนายน',7=>'กรกฎาคม',8=>'สิงหาคม',9=>'กันยายน',10=>'ตุลาคม',11=>'พฤศจิกายน',12=>'ธันวาคม'];
-        $thaiDays = ['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'];
-        $thaiDate = 'วัน' . $thaiDays[$today->dayOfWeek] . 'ที่ ' . $today->day . ' ' . $thaiMonths[$today->month] . ' ' . ($today->year + 543);
-
+        $today = today();
+        $thaiDate = $today->locale('th')->isoFormat('D MMMM YYYY');
 
         $todayRevenue = Invoice::where('status', 'paid')
             ->whereDate('invoice_date', $today->toDateString())
@@ -33,8 +30,7 @@ class ManagerController extends Controller
         $pendingPaymentsCount = Invoice::where('status', 'unpaid')->count();
         
         $stockAlertsCount = Medicine::whereColumn('stock_quantity', '<=', 'minimum_stock')->count();
-
-        //มาไงหี request
+        
         $revenuePeriod = $request->query('period', 'daily');
       
         $revenues = [];
@@ -132,7 +128,6 @@ class ManagerController extends Controller
             })->all();
 
         return view('vetcare.manager.dashboard', compact(
-            'revenues',
             'thaiDate',
             'revenuePeriod',
             'todayRevenue',

@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -45,7 +45,7 @@ class AuthController extends Controller
         }
 
         // บัญชีที่ถูกระงับ (รหัสผ่านถูกแต่ status = inactive)
-        $record = DB::table('users')->where('email', $data['email'])->first();
+        $record = User::where('email', $data['email'])->first();
         if ($record && $record->status !== 'active' && Hash::check($data['password'], $record->password)) {
             return back()->withInput($request->only('email', 'role'))
                 ->withErrors(['email' => 'บัญชีนี้ถูกระงับการใช้งาน กรุณาติดต่อผู้จัดการ']);

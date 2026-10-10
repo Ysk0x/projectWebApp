@@ -10,4 +10,9 @@ class Owner extends Model
     protected $primaryKey = 'owner_id';
     public $incrementing = false;
     protected $keyType = 'string';
+
+    public function pets()
+    {
+        return $this->hasMany(Pet::class, 'owner_id', 'owner_id');
+    }
 }

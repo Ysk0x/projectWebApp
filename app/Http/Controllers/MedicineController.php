@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Medicine;
+use App\Models\Treatment;
+use App\Models\TreatmentMedicine;
+use App\Models\InvoiceItems;
 use Illuminate\Support\Facades\DB;
 
 class MedicineController extends Controller
@@ -12,7 +16,7 @@ class MedicineController extends Controller
     {
         $search = trim((string) $request->query('search', ''));
 
-        $query = DB::table('medicines')->where('status', 'active');
+        $query = Medicine::where('status', 'active');
         if ($search !== '') {
             $like = '%' . $search . '%';
             $query->where(function ($q) use ($like) {
@@ -27,7 +31,7 @@ class MedicineController extends Controller
             return $m;
         });
 
-        $all = DB::table('medicines')->where('status', 'active')->get();
+        $all = Medicine::where('status', 'active')->get();
         $totalMedicines = $all->count();
         $normalCount = $all->filter(fn ($m) => $this->stockStatus($m) === 'normal')->count();
         $lowCount    = $all->filter(fn ($m) => $this->stockStatus($m) === 'low')->count();
@@ -36,7 +40,7 @@ class MedicineController extends Controller
         $panel = $request->query('panel');
         $selectedMedicine = null;
         if (in_array($panel, ['edit', 'delete'], true)) {
-            $selectedMedicine = DB::table('medicines')->where('medicine_id', $request->query('id'))->first();
+            $selectedMedicine = Medicine::where('medicine_id', $request->query('id'))->first();
         }
 
         return view('vetcare.manager.medicines', compact(
@@ -45,13 +49,12 @@ class MedicineController extends Controller
         ));
     }
 
-    /** CREATE */
     public function store(Request $request)
     {
         $data = $this->validated($request);
 
         DB::transaction(function () use ($data) {
-            DB::table('medicines')->insert([
+            Medicine::insert([
                 'medicine_id'    => $this->nextId(),
                 'medicine_name'  => $data['medicine_name'],
                 'unit'           => $data['unit'],
@@ -71,11 +74,11 @@ class MedicineController extends Controller
     /** UPDATE */
     public function update(Request $request, string $id)
     {
-        abort_unless(DB::table('medicines')->where('medicine_id', $id)->exists(), 404);
+        abort_unless(Medicine::where('medicine_id', $id)->exists(), 404);
 
         $data = $this->validated($request);
 
-        DB::table('medicines')->where('medicine_id', $id)->update($data + ['updated_at' => now()]);
+        Medicine::where('medicine_id', $id)->update($data + ['updated_at' => now()]);
 
         return redirect()->route('vetcare.manager.medicines')->with('success', 'บันทึกข้อมูลยาเรียบร้อยแล้ว');
     }
@@ -83,20 +86,20 @@ class MedicineController extends Controller
     /** DELETE (ถ้ายาเคยถูกใช้ในการรักษา/ใบเสร็จ จะเปลี่ยนเป็น inactive แทน) */
     public function destroy(string $id)
     {
-        abort_unless(DB::table('medicines')->where('medicine_id', $id)->exists(), 404);
+        abort_unless(Medicine::where('medicine_id', $id)->exists(), 404);
 
         $referenced =
-            DB::table('treatment_medicines')->where('medicine_id', $id)->exists() ||
-            DB::table('invoice_items')->where('medicine_id', $id)->exists();
+            TreatmentMedicine::where('medicine_id', $id)->exists() ||
+            InvoiceItems::where('medicine_id', $id)->exists();
 
         if ($referenced) {
-            DB::table('medicines')->where('medicine_id', $id)->update(['status' => 'inactive', 'updated_at' => now()]);
+            Medicine::where('medicine_id', $id)->update(['status' => 'inactive', 'updated_at' => now()]);
 
             return redirect()->route('vetcare.manager.medicines')
                 ->with('success', 'ยานี้มีประวัติการใช้งาน จึงปิดการใช้งานแทนการลบถาวร');
         }
 
-        DB::table('medicines')->where('medicine_id', $id)->delete();
+        Medicine::where('medicine_id', $id)->delete();
 
         return redirect()->route('vetcare.manager.medicines')->with('success', 'ลบยาเรียบร้อยแล้ว');
     }
@@ -137,7 +140,7 @@ class MedicineController extends Controller
 
     private function nextId(): string
     {
-        $max = DB::table('medicines')->where('medicine_id', 'like', 'M%')->max('medicine_id');
+        $max = Medicine::where('medicine_id', 'like', 'M%')->max('medicine_id');
         $n = $max ? (int) substr($max, 1) : 0;
 
         return 'M' . str_pad((string) ($n + 1), 4, '0', STR_PAD_LEFT);

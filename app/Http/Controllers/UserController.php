@@ -3,21 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use App\Models\User;
+use App\Models\InvoiceAudit;
+use App\Models\Invoice;
+use App\Models\Treatment;
+use App\Models\Payment;
+use App\Models\Appointments;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
     private const ROLES = ['vet', 'staff', 'manager'];
     private const STATUSES = ['active', 'inactive'];
 
-    /** READ: รายการ + ค้นหา + เปิด modal (create/edit/reset/delete) */
     public function index(Request $request)
     {
         $search = trim((string) $request->query('search', ''));
 
-        $query = DB::table('users');
+        $query = User::query();
         if ($search !== '') {
             $like = '%' . $search . '%';
             $query->where(function ($q) use ($like) {
@@ -28,15 +35,15 @@ class UserController extends Controller
         }
         $users = $query->orderBy('user_id')->get();
 
-        $totalUsers    = DB::table('users')->count();
-        $managerCount  = DB::table('users')->where('role', 'manager')->count();
-        $staffCount    = DB::table('users')->where('role', '!=', 'manager')->count();
-        $inactiveCount = DB::table('users')->where('status', 'inactive')->count();
+        $totalUsers    = User::count();
+        $managerCount  = User::where('role', 'manager')->count();
+        $staffCount    = User::where('role', '!=', 'manager')->count();
+        $inactiveCount = User::where('status', 'inactive')->count();
 
         $panel = $request->query('panel');
         $selectedUser = null;
         if (in_array($panel, ['edit', 'reset', 'delete'], true)) {
-            $selectedUser = DB::table('users')->where('user_id', $request->query('id'))->first();
+            $selectedUser = User::where('user_id', $request->query('id'))->first();
         }
 
         return view('vetcare.manager.users', compact(
@@ -57,7 +64,7 @@ class UserController extends Controller
         ], $this->messages());
 
         DB::transaction(function () use ($data) {
-            DB::table('users')->insert([
+            User::insert([
                 'user_id'    => $this->nextId('users', 'user_id', 'U', 4),
                 'email'      => $data['email'],
                 'password'   => Hash::make($data['password']),
@@ -75,7 +82,7 @@ class UserController extends Controller
     /** UPDATE */
     public function update(Request $request, string $id)
     {
-        $user = DB::table('users')->where('user_id', $id)->first();
+        $user = User::where('user_id', $id)->first();
         abort_unless($user, 404);
 
         $data = $request->validate([
@@ -85,14 +92,13 @@ class UserController extends Controller
             'status'    => ['required', Rule::in(self::STATUSES)],
         ], $this->messages());
 
-        // กันผู้จัดการล็อกตัวเองออกจากระบบ
         if ($this->isSelf($request, $user) && ($data['role'] !== 'manager' || $data['status'] !== 'active')) {
             return back()->withInput()->withErrors([
                 'role' => 'ไม่สามารถลดสิทธิ์หรือระงับบัญชีของตัวเองได้',
             ]);
         }
 
-        DB::table('users')->where('user_id', $id)->update([
+        User::where('user_id', $id)->update([
             'email'      => $data['email'],
             'full_name'  => $data['full_name'],
             'role'       => $data['role'],
@@ -106,13 +112,13 @@ class UserController extends Controller
     /** รีเซ็ตรหัสผ่าน */
     public function resetPassword(Request $request, string $id)
     {
-        abort_unless(DB::table('users')->where('user_id', $id)->exists(), 404);
+        abort_unless(User::where('user_id', $id)->exists(), 404);
 
         $data = $request->validate([
             'password' => ['required', 'string', 'min:8', 'max:255'],
         ], $this->messages());
 
-        DB::table('users')->where('user_id', $id)->update([
+        User::where('user_id', $id)->update([
             'password'   => Hash::make($data['password']),
             'updated_at' => now(),
         ]);
@@ -120,10 +126,9 @@ class UserController extends Controller
         return redirect()->route('vetcare.manager.users')->with('success', 'รีเซ็ตรหัสผ่านเรียบร้อยแล้ว');
     }
 
-    /** DELETE (ถ้าถูกอ้างอิงในข้อมูลอื่นจะเปลี่ยนเป็น inactive แทน เพื่อไม่ให้ FK พัง) */
     public function destroy(Request $request, string $id)
     {
-        $user = DB::table('users')->where('user_id', $id)->first();
+        $user = User::where('user_id', $id)->first();
         abort_unless($user, 404);
 
         if ($this->isSelf($request, $user)) {
@@ -131,25 +136,23 @@ class UserController extends Controller
         }
 
         $referenced =
-            DB::table('appointments')->where('staff_id', $id)->exists() ||
-            DB::table('treatments')->where('staff_id', $id)->exists() ||
-            DB::table('invoices')->where('created_by', $id)->exists() ||
-            DB::table('payments')->where('received_by', $id)->exists() ||
-            DB::table('invoice_audits')->where('audited_by', $id)->exists();
+            Appointments::where('staff_id', $id)->exists() ||
+            Treatment::where('staff_id', $id)->exists() ||
+            Invoice::where('created_by', $id)->exists() ||
+            Payment::where('received_by', $id)->exists() ||
+            InvoiceAudit::where('audited_by', $id)->exists();
 
         if ($referenced) {
-            DB::table('users')->where('user_id', $id)->update(['status' => 'inactive', 'updated_at' => now()]);
+            User::where('user_id', $id)->update(['status' => 'inactive', 'updated_at' => now()]);
 
             return redirect()->route('vetcare.manager.users')
                 ->with('success', 'บัญชีนี้มีประวัติการใช้งานในระบบ จึงเปลี่ยนสถานะเป็น "ระงับ" แทนการลบ');
         }
 
-        DB::table('users')->where('user_id', $id)->delete();
+        User::where('user_id', $id)->delete();
 
         return redirect()->route('vetcare.manager.users')->with('success', 'ลบผู้ใช้งานเรียบร้อยแล้ว');
     }
-
-    /* ---------------------------------------------------------- */
 
     private function isSelf(Request $request, object $user): bool
     {
@@ -157,12 +160,19 @@ class UserController extends Controller
     }
 
     private function nextId(string $table, string $column, string $prefix, int $digits): string
-    {
-        $max = DB::table($table)->where($column, 'like', $prefix . '%')->max($column);
-        $n = $max ? (int) substr($max, strlen($prefix)) : 0;
+{
+    $max = (new class extends Model {
+        protected $guarded = [];
+        public $timestamps = false;
+    })->setTable($table)
+        ->newQuery()
+        ->where($column, 'like', $prefix . '%')
+        ->max($column);
 
-        return $prefix . str_pad((string) ($n + 1), $digits, '0', STR_PAD_LEFT);
-    }
+    $n = $max ? (int) substr($max, strlen($prefix)) : 0;
+
+    return $prefix . Str::padLeft((string) ($n + 1), $digits, '0');
+}
 
     private function messages(): array
     {
