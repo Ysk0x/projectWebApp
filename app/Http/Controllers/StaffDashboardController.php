@@ -38,7 +38,14 @@ class StaffDashboardController extends Controller
             )
             ->selectRaw("CONCAT(owners.first_name, ' ', owners.last_name) as owner_name")
             ->orderBy('appointments_time', 'asc')
-            ->get();
+            ->get()
+            ->map(function ($row) use ($today) {
+                $row->daysLeft = (int) $today->diffInDays(
+                    \Carbon\Carbon::parse($row->appointment_date),
+                    false
+                );
+                return $row;
+            });
 
         $unpaidInvoice = DB::table('invoices')
             ->join('pets', 'invoices.pet_id', '=', 'pets.pet_id')
@@ -53,16 +60,14 @@ class StaffDashboardController extends Controller
             ->get();
 
         $todayScheduleCount = $todaySchedule->count();
-        $followCaseCount = $followCase->count();
 
         $waitingTreatment = DB::table('appointments')
             ->where('status', 'scheduled')
             ->whereDate('appointment_date', $today)
             ->count();
 
-        $waitingPayment = DB::table('invoices')
-            ->where('status', 'unpaid')
-            ->count();
+        $waitingPayment =  $unpaidInvoice->count();
+        $followCaseCount = $followCase->count();
 
         return view('vetcare.staff.dashboard', [
             'thaiDate' => $thaiDate,

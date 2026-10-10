@@ -152,15 +152,24 @@
                     <div class="follow-card">
                         <div class="follow-head">
                             <h5>{{ $case -> pet_name }}</h5>
-                            {{-- <span class="follow-tag tag-{{ $case['tag'] }}">{{ $case['label'] }}</span> --}}
+                            <span class="follow-tag tag-tomorrow">
+                                @if ($case->daysLeft > 0)
+                                    {{ $case->daysLeft }} วัน
+                                @elseif ($case->daysLeft == 0)
+                                    นัดวันนี้
+                                @else
+                                    เลยกำหนด {{ abs($case->daysLeft) }} วัน
+                                @endif
+                            </span>
                         </div>
                         <p class="follow-owner">{{ $case -> owner_name }}</p>
-                        <p class="follow-note">หมายเหตุ: 
-                                                @if (empty($case -> notes))
-                                                    -
-                                                @else
-                                                    {{ $case -> notes }}
-                                                @endif
+                        <p class="follow-note">
+                            หมายเหตุ: 
+                            @if (empty($case -> notes))
+                                -
+                            @else
+                                {{ $case -> notes }}
+                            @endif
                         </p>
                         <p class="follow-service-type">ประเภท: {{ $case -> service_type }}</p>
                     </div>
