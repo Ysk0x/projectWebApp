@@ -7,11 +7,6 @@
     <link rel="stylesheet" href="{{ asset('css/vetcare/dashboard.css') }}">
 @endpush
 
-@php
-    $statusLabels = ['done' => 'เสร็จสิ้น', 'serving' => 'รอชำระเงิน', 'waiting' => 'รอรับบริการ', 'confirmed' => 'นัดหมาย'];
-    $statusClass  = ['done' => 'status-done', 'serving' => 'status-serving', 'waiting' => 'status-waiting', 'confirmed' => 'status-appointment'];
-@endphp
-
 @section('content')
 
 <div class="staff-dashboard-page">
@@ -38,7 +33,7 @@
                 <div class="summary-icon icon-blue">📋</div>
                 <div class="summary-content">
                     <p class="summary-label">คิววันนี้</p>
-                    <h2 class="summary-value">{{ $queueCount }}</h2>
+                    <h2 class="summary-value">{{ $todayScheduleCount }}</h2>
                     <p class="summary-unit">รายการ</p>
                 </div>
             </div>
@@ -49,7 +44,7 @@
                 <div class="summary-icon icon-green">🐾</div>
                 <div class="summary-content">
                     <p class="summary-label">สัตว์รอรับบริการ</p>
-                    <h2 class="summary-value">{{ $waitingCount }}</h2>
+                    <h2 class="summary-value">{{ $waitingTreatment }}</h2>
                     <p class="summary-unit">ตัว</p>
                 </div>
             </div>
@@ -60,7 +55,7 @@
                 <div class="summary-icon icon-yellow">💳</div>
                 <div class="summary-content">
                     <p class="summary-label">รอชำระเงิน</p>
-                    <h2 class="summary-value">{{ $unpaidCount }}</h2>
+                    <h2 class="summary-value">{{ $waitingPayment }}</h2>
                     <p class="summary-unit">รายการ</p>
                 </div>
             </div>
@@ -71,7 +66,7 @@
                 <div class="summary-icon icon-pink">📌</div>
                 <div class="summary-content">
                     <p class="summary-label">ติดตามเคส</p>
-                    <h2 class="summary-value">{{ count($followUps) }}</h2>
+                    <h2 class="summary-value">{{ $followCaseCount }}</h2>
                     <p class="summary-unit">รายการ</p>
                 </div>
             </div>
@@ -101,22 +96,36 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse ($schedule as $row)
+                            @forelse ($todaySchedule as $row)
                                 <tr>
-                                    <td class="time-text">{{ $row['time'] }}</td>
-                                    <td>{{ $row['pet'] }}</td>
-                                    <td>{{ $row['owner'] }}</td>
-                                    <td>{{ $row['service'] }}</td>
+                                    <td class="time-text">{{ substr($row->appointment_time, 0, 5) }}</td>
+                                    <td>{{ $row -> pet_name }}</td>
+                                    <td>{{ $row -> owner_name }}</td>
+                                    <td>{{ $row -> service_type }}</td>
                                     <td>
-                                        <span class="status-badge {{ $statusClass[$row['status']] ?? '' }}">
-                                            {{ $statusLabels[$row['status']] ?? $row['status'] }}
+                                        <span class="status-badge
+                                            @if ($row->status === 'scheduled')
+                                                status-waiting
+                                            @elseif ($row->status === 'completed')
+                                                status-completed
+                                            @elseif ($row->status === 'cancelled')
+                                                status-cancelled
+                                            @endif
+                                        ">
+                                            @if ($row->status === 'scheduled')
+                                                รอรับบริการ
+                                            @elseif ($row->status === 'completed')
+                                                เสร็จสิ้น
+                                            @elseif ($row->status === 'cancelled')
+                                                ยกเลิก
+                                            @else
+                                                {{ $row->status }}
+                                            @endif
                                         </span>
                                     </td>
                                     <td class="text-center">
-                                        @if ($row['status'] === 'serving' && $row['invoice_id'])
-                                            <a href="{{ route('vetcare.staff.billing', ['invoice' => $row['invoice_id']]) }}" class="btn btn-action-outline">ชำระเงิน</a>
-                                        @elseif ($row['status'] === 'waiting')
-                                            <a href="{{ route('vetcare.staff.treatments', ['appointment' => $row['id']]) }}" class="btn btn-action-primary">รักษา</a>
+                                        @if ($row-> status === 'scheduled')
+                                            <a href="{{ route('vetcare.staff.treatments', ['appointment' => $row -> appointment_id]) }}" class="btn btn-action-primary">รักษา</a>
                                         @else
                                             -
                                         @endif
@@ -139,14 +148,21 @@
                     <h2 class="panel-title">📌 เคสที่ต้องติดตาม</h2>
                 </div>
 
-                @forelse ($followUps as $case)
+                @forelse ($followCase as $case)
                     <div class="follow-card">
                         <div class="follow-head">
-                            <h5>{{ $case['pet'] }}</h5>
-                            <span class="follow-tag tag-{{ $case['tag'] }}">{{ $case['label'] }}</span>
+                            <h5>{{ $case -> pet_name }}</h5>
+                            {{-- <span class="follow-tag tag-{{ $case['tag'] }}">{{ $case['label'] }}</span> --}}
                         </div>
-                        <p class="follow-owner">{{ $case['owner'] }}</p>
-                        <p class="follow-note">{{ $case['note'] }}</p>
+                        <p class="follow-owner">{{ $case -> owner_name }}</p>
+                        <p class="follow-note">หมายเหตุ: 
+                                                @if (empty($case -> notes))
+                                                    -
+                                                @else
+                                                    {{ $case -> notes }}
+                                                @endif
+                        </p>
+                        <p class="follow-service-type">ประเภท: {{ $case -> service_type }}</p>
                     </div>
                 @empty
                     <p class="text-muted px-3 pb-3 mb-0">ไม่มีนัดหมายใน 7 วันข้างหน้า</p>
@@ -158,15 +174,15 @@
                     <h2 class="panel-title">💳 รอชำระเงิน</h2>
                 </div>
 
-                @forelse ($unpaidInvoices as $inv)
+                @forelse ($unpaidInvoice as $inv)
                     <div class="payment-item">
                         <div>
-                            <h5>{{ $inv->pet_name }}</h5>
-                            <p>{{ trim($inv->first_name . ' ' . $inv->last_name) }}</p>
+                            <h5>{{ $inv -> pet_name }}</h5>
+                            <p>{{ $inv-> owner_name }}</p>
                         </div>
                         <div class="payment-right">
                             <div class="payment-price">฿{{ number_format($inv->total_amount) }}</div>
-                            <a href="{{ route('vetcare.staff.billing', ['invoice' => $inv->invoice_id]) }}" class="payment-link">ชำระ</a>
+                            <a href="{{ route('vetcare.staff.billing', ['invoice' => $inv -> invoice_id]) }}" class="payment-link">ชำระ</a>
                         </div>
                     </div>
                 @empty
